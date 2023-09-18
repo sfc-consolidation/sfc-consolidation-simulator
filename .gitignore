@@ -14,3 +14,6 @@ app/libs/**
 
 # Vs Code Settings (IDE)
 .vscode
+
+# Debugging binary files
+app/bin

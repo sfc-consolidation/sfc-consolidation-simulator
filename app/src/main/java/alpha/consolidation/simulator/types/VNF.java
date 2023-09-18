@@ -11,6 +11,7 @@ public class VNF {
   private int id;
   private int srv_id;
   private int sfc_id;
-  private int req_vCPU;
-  private int req_vMEM;
+  private int req_vCPU_num;
+  private float req_vMEM_gbt;
+  private boolean movable;
 }

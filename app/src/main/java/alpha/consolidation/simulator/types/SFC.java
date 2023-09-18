@@ -10,6 +10,6 @@ import lombok.Data;
  */
 @Data
 public class SFC {
-  private String id;
+  private int id;
   private List<Integer> vnfList;
 }

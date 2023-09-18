@@ -6,10 +6,11 @@ package alpha.consolidation.simulator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import alpha.consolidation.simulator.types.Action;
 import alpha.consolidation.simulator.types.State;
+import alpha.consolidation.simulator.utils.Constants;
+import alpha.consolidation.simulator.utils.RandomSingleton;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -28,31 +29,23 @@ public class App implements Runnable {
       "--upload" }, arity = "0..1", description = "Upload results to remote DB", defaultValue = "false")
   static boolean upload;
 
-  static final long seed = System.currentTimeMillis();
-  static final Random rand = new Random(seed);
-
-  static final int MAX_SRV_NUM = 100;
-  static final int MAX_VNF_NUM = 200;
-  static final int MAX_SFC_NUM = 100;
-  static final int MAX_EPISODE_LEN = 100;
-
   public void run() {
     if (srvNum == 0)
-      srvNum = rand.nextInt(MAX_SRV_NUM + 1);
+      srvNum = RandomSingleton.getInstance().nextInt(Constants.MAX_SRV_NUM + 1);
     if (vnfNum == 0)
-      vnfNum = rand.nextInt(MAX_VNF_NUM + 1);
+      vnfNum = RandomSingleton.getInstance().nextInt(Constants.MAX_VNF_NUM + 1);
     if (sfcNum == 0)
-      sfcNum = rand.nextInt(MAX_SFC_NUM + 1);
+      sfcNum = RandomSingleton.getInstance().nextInt(Constants.MAX_SFC_NUM + 1);
 
     List<State> states = new ArrayList<>();
     List<Action> actions = new ArrayList<>();
 
-    Env env = new Env();
+    Env env = new Env(srvNum, sfcNum, vnfNum, null, null, null);
     State state = env.reset();
     Agent agent = new Agent();
 
     // Run Simulation.
-    for (int i = 1; i < MAX_EPISODE_LEN; ++i) {
+    for (int i = 1; i < Constants.MAX_EPISODE_LEN; ++i) {
       Optional<Action> action = agent.inference(state);
       if (!action.isPresent())
         break;

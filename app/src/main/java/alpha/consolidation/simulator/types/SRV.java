@@ -11,9 +11,10 @@ import lombok.Data;
 @Data
 public class SRV {
   int id;
-  int tot_vCPU;
-  int use_vCPU;
-  int tot_vMEM;
-  int use_vMEM;
+  int tot_vCPU_num;
+  int use_vCPU_num;
+  int tot_vMEM_gbt;
+  int use_vMEM_gbt;
   Map<String, Integer> run_VNFs;
+  boolean sleepable;
 }
