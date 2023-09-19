@@ -1,6 +1,8 @@
 package alpha.consolidation.simulator.types;
 
-import java.util.Map;
+import java.util.List;
+
+import org.cloudsimplus.hosts.network.NetworkHost;
 
 import lombok.Data;
 
@@ -10,11 +12,23 @@ import lombok.Data;
  */
 @Data
 public class SRV {
-  int id;
-  int tot_vCPU_num;
-  int use_vCPU_num;
-  int tot_vMEM_gbt;
-  int use_vMEM_gbt;
-  Map<String, Integer> run_VNFs;
-  boolean sleepable;
+  private int id;
+  private int totVcpuNum;
+  private int totVmemMb;
+  private boolean sleepable;
+
+  private NetworkHost host;
+
+  public List<VNF> getVNFList(List<VNF> fullVnfList) {
+    return fullVnfList.stream().filter(vnf -> vnf.getSrvId() == id).toList();
+  }
+
+  public SRV capture() {
+    SRV temp = new SRV();
+    temp.setId(id);
+    temp.setTotVcpuNum(totVcpuNum);
+    temp.setTotVmemMb(totVmemMb);
+    temp.setSleepable(sleepable);
+    return temp;
+  }
 }

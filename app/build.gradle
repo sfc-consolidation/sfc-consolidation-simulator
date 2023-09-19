@@ -24,8 +24,8 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1.1-jre'
 
-    // CloudSimPlus
-    implementation files('libs/cloudsimplus-8.5.0.jar')
+    // For DeepCopy
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     // Command Line Interface Tool
     implementation 'info.picocli:picocli:4.7.5'
@@ -35,6 +35,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+    
+    // CloudSimPlus
+    implementation files('libs/cloudsimplus-8.5.0.jar')
 }
 
 application {
@@ -45,4 +48,10 @@ application {
 task runExample(type: JavaExec) {
     mainClass = 'alpha.consolidation.simulator.examples.Main'
     classpath = sourceSets.main.runtimeClasspath
+}
+
+task runSrv2Vnf5Sfc2(type: JavaExec) {
+  mainClass = 'alpha.consolidation.simulator.App'
+  classpath = sourceSets.main.runtimeClasspath
+  args '-s', '2', '-v', '5', '-f', '2'
 }

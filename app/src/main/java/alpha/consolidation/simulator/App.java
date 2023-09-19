@@ -3,17 +3,18 @@
  */
 package alpha.consolidation.simulator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
+
+import picocli.CommandLine;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Command;
 
 import alpha.consolidation.simulator.types.Action;
 import alpha.consolidation.simulator.types.State;
 import alpha.consolidation.simulator.utils.Constants;
 import alpha.consolidation.simulator.utils.RandomSingleton;
-import picocli.CommandLine;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
 
 @Command(description = "Simulate a VNF Consolidation Scenario", mixinStandardHelpOptions = true, version = "0.0.1")
 public class App implements Runnable {
@@ -39,7 +40,6 @@ public class App implements Runnable {
 
     List<State> states = new ArrayList<>();
     List<Action> actions = new ArrayList<>();
-
     Env env = new Env(srvNum, sfcNum, vnfNum, null, null, null);
     State state = env.reset();
     Agent agent = new Agent();
@@ -73,6 +73,7 @@ public class App implements Runnable {
       System.out.println("Saving results to remote DB...");
       // TODO: Implement this. (Make JSON format)
     }
+    env.getPowerConsumption();
   }
 
   public static void main(String[] args) {

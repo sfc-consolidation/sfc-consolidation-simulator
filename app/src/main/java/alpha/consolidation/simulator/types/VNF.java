@@ -1,5 +1,8 @@
 package alpha.consolidation.simulator.types;
 
+import org.cloudsimplus.cloudlets.network.NetworkCloudlet;
+import org.cloudsimplus.vms.network.NetworkVm;
+
 import lombok.Data;
 
 /*
@@ -9,9 +12,24 @@ import lombok.Data;
 @Data
 public class VNF {
   private int id;
-  private int srv_id;
-  private int sfc_id;
-  private int req_vCPU_num;
-  private float req_vMEM_gbt;
+  private int srvId;
+  private int sfcId;
+  private int reqVcpuNum;
+  private int reqVmemMb;
   private boolean movable;
+
+  // for CloudSimPlus
+  private NetworkVm vm;
+  private NetworkCloudlet cloudlet;
+
+  public VNF capture() {
+    VNF temp = new VNF();
+    temp.setId(id);
+    temp.setSrvId(srvId);
+    temp.setSfcId(sfcId);
+    temp.setReqVcpuNum(reqVcpuNum);
+    temp.setReqVmemMb(reqVmemMb);
+    temp.setMovable(movable);
+    return temp;
+  }
 }

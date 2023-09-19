@@ -11,7 +11,15 @@ import lombok.Data;
  */
 @Data
 public class State {
-  List<SRV> srvList;
-  List<SFC> sfcList;
-  List<VNF> vnfList;
+  private List<SRV> srvList;
+  private List<SFC> sfcList;
+  private List<VNF> vnfList;
+
+  public State capture() {
+    State temp = new State();
+    temp.setSrvList(srvList.stream().map(SRV::capture).toList());
+    temp.setSfcList(sfcList.stream().map(SFC::capture).toList());
+    temp.setVnfList(vnfList.stream().map(VNF::capture).toList());
+    return temp;
+  }
 }
