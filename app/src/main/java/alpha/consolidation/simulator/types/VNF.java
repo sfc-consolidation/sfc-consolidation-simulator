@@ -3,6 +3,8 @@ package alpha.consolidation.simulator.types;
 import org.cloudsimplus.cloudlets.network.NetworkCloudlet;
 import org.cloudsimplus.vms.network.NetworkVm;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 /*
@@ -10,10 +12,12 @@ import lombok.Data;
  * Data Type of VNF.
  */
 @Data
+@JsonIgnoreProperties({ "vm", "cloudlet" })
 public class VNF {
   private int id;
   private int srvId;
   private int sfcId;
+  private int orderInSfc;
   private int reqVcpuNum;
   private int reqVmemMb;
   private boolean movable;

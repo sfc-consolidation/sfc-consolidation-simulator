@@ -13,45 +13,36 @@ import picocli.CommandLine.Command;
 
 import alpha.consolidation.simulator.types.Action;
 import alpha.consolidation.simulator.types.State;
-import alpha.consolidation.simulator.utils.Constants;
-import alpha.consolidation.simulator.utils.RandomSingleton;
 
 @Command(description = "Simulate a VNF Consolidation Scenario", mixinStandardHelpOptions = true, version = "0.0.1")
 public class App implements Runnable {
-  @Option(names = { "-s", "--srv_n" }, description = "Number of servers", defaultValue = "0")
-  static int srvNum;
-  @Option(names = { "-v", "--vnf_n" }, description = "Number of VNFs", defaultValue = "0")
-  static int vnfNum;
-  @Option(names = { "-f", "--sfc_n" }, description = "Number of SFCs", defaultValue = "0")
-  static int sfcNum;
-  @Option(names = { "-d", "--debug" }, arity = "0..1", description = "Debug mode", defaultValue = "false")
+  @Option(names = { "-f", "--file" }, description = "Path of topology file")
+  static String file_path;
+  @Option(names = { "-a",
+      "--algorithm" }, description = "Algorithm to use", required = false, defaultValue = "RANDOM")
+  static InferenceAlgorithm algorithm;
+  @Option(names = { "-d", "--debug" }, description = "Print debug info", required = false, defaultValue = "false")
   static boolean debug;
   @Option(names = { "-u",
-      "--upload" }, arity = "0..1", description = "Upload results to remote DB", defaultValue = "false")
+      "--upload" }, description = "Upload results to remote DB", required = false, defaultValue = "false")
   static boolean upload;
+  final static List<State> states = new ArrayList<>();
+  final static List<Action> actions = new ArrayList<>();
 
   public void run() {
-    if (srvNum == 0)
-      srvNum = RandomSingleton.getInstance().nextInt(Constants.MAX_SRV_NUM + 1);
-    if (vnfNum == 0)
-      vnfNum = RandomSingleton.getInstance().nextInt(Constants.MAX_VNF_NUM + 1);
-    if (sfcNum == 0)
-      sfcNum = RandomSingleton.getInstance().nextInt(Constants.MAX_SFC_NUM + 1);
-
-    List<State> states = new ArrayList<>();
-    List<Action> actions = new ArrayList<>();
-    Env env = new Env(srvNum, sfcNum, vnfNum, null, null, null);
+    Env env = new Env(file_path);
     State state = env.reset();
     Agent agent = new Agent();
 
     // Run Simulation.
-    for (int i = 1; i < Constants.MAX_EPISODE_LEN; ++i) {
-      Optional<Action> action = agent.inference(state);
+    // for (int i = 1; i < Constants.MAX_EPISODE_LEN; ++i) { (TODO: Change)
+    for (int i = 1; i < 5; ++i) {
+      Optional<Action> action = agent.inference(state, algorithm);
       if (!action.isPresent())
         break;
       states.add(state);
       actions.add(action.get());
-      state = env.step(state, action.get());
+      state = env.step(action.get());
     }
     states.add(state);
 
@@ -71,9 +62,7 @@ public class App implements Runnable {
     // Upload results to remote DB.
     if (upload) {
       System.out.println("Saving results to remote DB...");
-      // TODO: Implement this. (Make JSON format)
     }
-    env.getPowerConsumption();
   }
 
   public static void main(String[] args) {

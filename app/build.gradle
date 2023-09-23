@@ -27,6 +27,9 @@ dependencies {
     // For DeepCopy
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+    // For JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
+
     // Command Line Interface Tool
     implementation 'info.picocli:picocli:4.7.5'
 
@@ -50,8 +53,7 @@ task runExample(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runSrv2Vnf5Sfc2(type: JavaExec) {
-  mainClass = 'alpha.consolidation.simulator.App'
+task genInitState(type: JavaExec) {
+  mainClass = 'alpha.consolidation.simulator.utils.InitStateGenerator'
   classpath = sourceSets.main.runtimeClasspath
-  args '-s', '2', '-v', '5', '-f', '2'
 }

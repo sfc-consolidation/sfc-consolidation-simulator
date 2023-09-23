@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.cloudsimplus.hosts.network.NetworkHost;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 /*
@@ -11,6 +13,7 @@ import lombok.Data;
  * Data Type of Server.
  */
 @Data
+@JsonIgnoreProperties({ "host" })
 public class SRV {
   private int id;
   private int totVcpuNum;

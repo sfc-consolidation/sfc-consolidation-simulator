@@ -9,6 +9,6 @@ import lombok.Data;
  */
 @Data
 public class Action {
-  private int vnf_id;
-  private int srv_id;
+  private int vnfId;
+  private int srvId;
 }

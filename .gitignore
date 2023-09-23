@@ -17,3 +17,6 @@ app/libs/**
 
 # Debugging binary files
 app/bin
+
+
+app/src/main/resources/**
