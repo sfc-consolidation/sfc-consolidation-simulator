@@ -29,4 +29,11 @@ public class SFC {
     temp.setId(id);
     return temp;
   }
+
+  public alpha.consolidation.simulator.generated.model.SFC toReqForm() {
+    var sfc = new alpha.consolidation.simulator.generated.model.SFC();
+    sfc.setId(id);
+    sfc.setLength(length);
+    return sfc;
+  }
 }

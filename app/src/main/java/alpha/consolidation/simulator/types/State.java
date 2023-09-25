@@ -12,7 +12,7 @@ import lombok.Data;
  * For RL Agent.
  */
 @Data
-@JsonIgnoreProperties({ "srvList" })
+@JsonIgnoreProperties({ "srvList", "info" })
 public class State {
   private List<Rack> rackList;
   private List<SFC> sfcList;
@@ -40,5 +40,13 @@ public class State {
     for (VNF vnf : vnfList) {
       System.out.printf("VNF: %s%n", vnf.toString());
     }
+  }
+
+  public alpha.consolidation.simulator.generated.model.StateInput toReqForm() {
+    var state = new alpha.consolidation.simulator.generated.model.StateInput();
+    state.setRackList(rackList.stream().map(Rack::toReqForm).toList());
+    state.setSfcList(sfcList.stream().map(SFC::toReqForm).toList());
+    state.setVnfList(vnfList.stream().map(VNF::toReqForm).toList());
+    return state;
   }
 }

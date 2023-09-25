@@ -34,4 +34,13 @@ public class SRV {
     temp.setSleepable(sleepable);
     return temp;
   }
+
+  public alpha.consolidation.simulator.generated.model.SRV toReqForm() {
+    var srv = new alpha.consolidation.simulator.generated.model.SRV();
+    srv.setId(id);
+    srv.setTotVcpuNum(totVcpuNum);
+    srv.setTotVmemMb(totVmemMb);
+    srv.setSleepable(sleepable);
+    return srv;
+  }
 }

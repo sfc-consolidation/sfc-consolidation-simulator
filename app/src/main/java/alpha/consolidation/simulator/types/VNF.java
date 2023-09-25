@@ -36,4 +36,16 @@ public class VNF {
     temp.setMovable(movable);
     return temp;
   }
+
+  public alpha.consolidation.simulator.generated.model.VNF toReqForm() {
+    var vnf = new alpha.consolidation.simulator.generated.model.VNF();
+    vnf.setId(id);
+    vnf.setSrvId(srvId);
+    vnf.setSfcId(sfcId);
+    vnf.setOrderInSfc(orderInSfc);
+    vnf.setReqVcpuNum(reqVcpuNum);
+    vnf.setReqVmemMb(reqVmemMb);
+    vnf.setMovable(movable);
+    return vnf;
+  }
 }

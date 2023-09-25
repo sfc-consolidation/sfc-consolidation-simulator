@@ -3,6 +3,7 @@ package alpha.consolidation.simulator;
 import java.io.File;
 import java.util.List;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -36,6 +37,7 @@ import alpha.consolidation.simulator.types.SRV;
 import alpha.consolidation.simulator.types.VNF;
 import alpha.consolidation.simulator.types.State;
 import alpha.consolidation.simulator.types.Action;
+import alpha.consolidation.simulator.types.Info;
 import alpha.consolidation.simulator.types.Rack;
 import alpha.consolidation.simulator.utils.Constants;
 import alpha.consolidation.simulator.utils.GeneratorSingleton;
@@ -43,7 +45,7 @@ import alpha.consolidation.simulator.utils.GeneratorSingleton;
 @Getter
 public class Env {
   private final State initState;
-  private final State curState;
+  private State curState;
 
   private static final int SCHEDULING_INTERVAL = 5;
 
@@ -176,9 +178,11 @@ public class Env {
     simulator.start();
 
     // 8. Print results.
+    curState = state;
     state.print();
     showSimulationResults(dc, sfcList.stream().map(SFC::getBroker).toList());
-    getPowerConsumption(state);
+    getResult().print();
+    // getPowerConsumption(state);
   }
 
   public State step(Action action) {
@@ -197,7 +201,37 @@ public class Env {
     return curState.capture();
   }
 
-  public void getPowerConsumption(State state) {
+  public Info getResult() {
+    Info info = new Info();
+    List<Float> powerList = new ArrayList<>();
+    List<Float> cpuUtilList = new ArrayList<>();
+    List<Float> memUtilList = new ArrayList<>();
+    List<Integer> bwUtilList = new ArrayList<>();
+    int sleepNum = 0; // TODO: change
+
+    for (Rack rack : curState.getRackList()) {
+      for (SRV srv : rack.getSrvList()) {
+        final var host = srv.getHost();
+        final HostResourceStats cpuStats = host.getCpuUtilizationStats();
+        final double memUtil = host.getRam().getPercentUtilization();
+        final double cpuUtil = cpuStats.getMean();
+        final double watts = host.getPowerModel().getPower(cpuUtil);
+        final double bwUtil = host.getBwUtilization();
+        powerList.add((float) watts);
+        cpuUtilList.add((float) cpuUtil);
+        memUtilList.add((float) memUtil);
+        bwUtilList.add((int) bwUtil);
+      }
+    }
+    info.setCpuUtilList(cpuUtilList);
+    info.setMemUtilList(memUtilList);
+    info.setPowerList(powerList);
+    info.setBwUtilList(bwUtilList);
+    info.setSleepNum(sleepNum);
+    return info;
+  }
+
+  private void getPowerConsumption(State state) {
     for (Rack rack : state.getRackList()) {
       for (SRV srv : rack.getSrvList()) {
         final var host = srv.getHost();

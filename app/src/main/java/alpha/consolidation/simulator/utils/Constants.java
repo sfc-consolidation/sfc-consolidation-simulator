@@ -33,4 +33,6 @@ public class Constants {
 
   // * Asumption
   public static final int VCPU_MIPS = 1000;
+
+  public static final String DEFAULT_API_SERVER = "http://localhost:8000";
 }

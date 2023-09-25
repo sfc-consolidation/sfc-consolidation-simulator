@@ -19,7 +19,11 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 
 public class ApiSingletone {
-  private static final DefaultApi api = new ApiClient().createService(DefaultApi.class);
+  private static DefaultApi api;
+
+  public static void setInstance(String baseUrl) {
+    api = new ApiClient(baseUrl).createService(DefaultApi.class);
+  }
 
   public static DefaultApi getInstance() {
     return api;
@@ -31,15 +35,14 @@ class ApiClient {
   private Retrofit.Builder adapterBuilder;
   private JSON json;
 
-  public ApiClient() {
-    createDefaultAdapter();
+  public ApiClient(String baseUrl) {
+    createDefaultAdapter(baseUrl);
   }
 
-  public void createDefaultAdapter() {
+  private void createDefaultAdapter(String baseUrl) {
     json = new JSON();
     this.okBuilder = new OkHttpClient.Builder();
 
-    String baseUrl = "http://localhost:8000";
     if (!baseUrl.endsWith("/"))
       baseUrl = baseUrl + "/";
 

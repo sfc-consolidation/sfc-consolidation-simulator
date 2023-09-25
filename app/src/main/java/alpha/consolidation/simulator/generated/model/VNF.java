@@ -25,7 +25,7 @@ import java.io.IOException;
  * VNF
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T14:30:24.222080183+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
 
 public class VNF {
   @SerializedName("id")
@@ -34,8 +34,8 @@ public class VNF {
   @SerializedName("srvId")
   private Object srvId = null;
 
-  @SerializedName("vnfId")
-  private Object vnfId = null;
+  @SerializedName("sfcId")
+  private Object sfcId = null;
 
   @SerializedName("orderInSfc")
   private Object orderInSfc = null;
@@ -85,22 +85,22 @@ public class VNF {
     this.srvId = srvId;
   }
 
-  public VNF vnfId(Object vnfId) {
-    this.vnfId = vnfId;
+  public VNF sfcId(Object sfcId) {
+    this.sfcId = sfcId;
     return this;
   }
 
    /**
-   * Get vnfId
-   * @return vnfId
+   * Get sfcId
+   * @return sfcId
   **/
   @Schema(required = true, description = "")
-  public Object getVnfId() {
-    return vnfId;
+  public Object getSfcId() {
+    return sfcId;
   }
 
-  public void setVnfId(Object vnfId) {
-    this.vnfId = vnfId;
+  public void setSfcId(Object sfcId) {
+    this.sfcId = sfcId;
   }
 
   public VNF orderInSfc(Object orderInSfc) {
@@ -187,7 +187,7 @@ public class VNF {
     VNF VNF = (VNF) o;
     return Objects.equals(this.id, VNF.id) &&
         Objects.equals(this.srvId, VNF.srvId) &&
-        Objects.equals(this.vnfId, VNF.vnfId) &&
+        Objects.equals(this.sfcId, VNF.sfcId) &&
         Objects.equals(this.orderInSfc, VNF.orderInSfc) &&
         Objects.equals(this.reqVcpuNum, VNF.reqVcpuNum) &&
         Objects.equals(this.reqVmemMb, VNF.reqVmemMb) &&
@@ -196,7 +196,7 @@ public class VNF {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, srvId, vnfId, orderInSfc, reqVcpuNum, reqVmemMb, movable);
+    return Objects.hash(id, srvId, sfcId, orderInSfc, reqVcpuNum, reqVmemMb, movable);
   }
 
 
@@ -207,7 +207,7 @@ public class VNF {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    srvId: ").append(toIndentedString(srvId)).append("\n");
-    sb.append("    vnfId: ").append(toIndentedString(vnfId)).append("\n");
+    sb.append("    sfcId: ").append(toIndentedString(sfcId)).append("\n");
     sb.append("    orderInSfc: ").append(toIndentedString(orderInSfc)).append("\n");
     sb.append("    reqVcpuNum: ").append(toIndentedString(reqVcpuNum)).append("\n");
     sb.append("    reqVmemMb: ").append(toIndentedString(reqVmemMb)).append("\n");

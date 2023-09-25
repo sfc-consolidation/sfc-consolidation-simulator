@@ -22,4 +22,11 @@ public class Rack {
     temp.setSrvList(srvList.stream().map(SRV::capture).toList());
     return temp;
   }
+
+  public alpha.consolidation.simulator.generated.model.Rack toReqForm() {
+    var rack = new alpha.consolidation.simulator.generated.model.Rack();
+    rack.setId(id);
+    rack.setSrvList(srvList.stream().map(SRV::toReqForm).toList());
+    return rack;
+  }
 }
