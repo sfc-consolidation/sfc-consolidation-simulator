@@ -12,7 +12,6 @@ public class Main {
       num = 0;
     }
     String className = "alpha.consolidation.simulator.examples.Example";
-    System.out.println(num);
     try {
       Class<?> cls = Class.forName(className + num);
       cls.getDeclaredConstructor().newInstance();

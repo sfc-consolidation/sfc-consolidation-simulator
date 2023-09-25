@@ -1,0 +1,21 @@
+src/main/AndroidManifest.xml
+.swagger-codegen-ignore
+.travis.yml
+build.sbt
+build.gradle
+.gitignore
+build.sbt
+git_push.sh
+gradle.properties
+gradlew
+gradlew.bat
+pom.xml
+README.md
+settings.gradle
+gradle/**
+docs/**
+
+# src/test/java/alpha/consolidation/simulator/generated/**/*
+# src/main/java/alpha/consolidation/simulator/generated/*
+# src/main/java/alpha/consolidation/simulator/generated/api/*
+# src/main/java/alpha/consolidation/simulator/generated/auth/*
