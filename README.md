@@ -1,6 +1,6 @@
-## Alpha Consolidation Simulator
+## SFC Consolidation Simulator
 
-This is a simulator for the Alpha Consolidation.
+This is a simulator for the SFC Consolidation.
 
 ## Dependencies
 
@@ -21,7 +21,7 @@ $ cd cloudsimplus
 $ git checkout 42b131a397f00ca587c580b05f6bb1ef43698230
 # Do build with Gradle or Maven
 # And move .jar file to app/libs/cloudsimplus-8.5.0.jar
-$ cd alpha-consolidation-simulator
+$ cd sfc-consolidation-simulator
 $ ./gradlew run
 ```
 
@@ -36,6 +36,6 @@ $ java -jar app/libs/swagger-codegen-cli.jar generate \
 -o app \
 -i <YOUR-API Server URL> \
 --library retrofit2 \
---model-package alpha.consolidation.simulator.generated.model \
---api-package alpha.consolidation.simulator.generated.api
+--model-package sfc.consolidation.simulator.generated.model \
+--api-package sfc.consolidation.simulator.generated.api
 ```

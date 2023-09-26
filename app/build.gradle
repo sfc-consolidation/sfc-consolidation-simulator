@@ -70,15 +70,15 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'alpha.consolidation.simulator.App'
+    mainClass = 'sfc.consolidation.simulator.App'
 }
 
 task runExample(type: JavaExec) {
-    mainClass = 'alpha.consolidation.simulator.examples.Main'
+    mainClass = 'sfc.consolidation.simulator.examples.Main'
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task genInitState(type: JavaExec) {
-  mainClass = 'alpha.consolidation.simulator.utils.InitStateGenerator'
+  mainClass = 'sfc.consolidation.simulator.utils.InitStateGenerator'
   classpath = sourceSets.main.runtimeClasspath
 }
