@@ -13,5 +13,5 @@
 package sfc.consolidation.simulator.generated.auth;
 
 public enum OAuthFlow {
-  accessCode, implicit, password, application
+    accessCode, implicit, password, application
 }

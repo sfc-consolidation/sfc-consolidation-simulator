@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * VNF
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class VNF {
   @SerializedName("id")
@@ -55,11 +54,10 @@ public class VNF {
     return this;
   }
 
-  /**
+   /**
    * Get id
-   * 
    * @return id
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getId() {
     return id;
@@ -74,11 +72,10 @@ public class VNF {
     return this;
   }
 
-  /**
+   /**
    * Get srvId
-   * 
    * @return srvId
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getSrvId() {
     return srvId;
@@ -93,11 +90,10 @@ public class VNF {
     return this;
   }
 
-  /**
+   /**
    * Get sfcId
-   * 
    * @return sfcId
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getSfcId() {
     return sfcId;
@@ -112,11 +108,10 @@ public class VNF {
     return this;
   }
 
-  /**
+   /**
    * Get orderInSfc
-   * 
    * @return orderInSfc
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getOrderInSfc() {
     return orderInSfc;
@@ -131,11 +126,10 @@ public class VNF {
     return this;
   }
 
-  /**
+   /**
    * Get reqVcpuNum
-   * 
    * @return reqVcpuNum
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getReqVcpuNum() {
     return reqVcpuNum;
@@ -150,11 +144,10 @@ public class VNF {
     return this;
   }
 
-  /**
+   /**
    * Get reqVmemMb
-   * 
    * @return reqVmemMb
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getReqVmemMb() {
     return reqVmemMb;
@@ -169,11 +162,10 @@ public class VNF {
     return this;
   }
 
-  /**
+   /**
    * Get movable
-   * 
    * @return movable
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getMovable() {
     return movable;
@@ -182,6 +174,7 @@ public class VNF {
   public void setMovable(Object movable) {
     this.movable = movable;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -206,11 +199,12 @@ public class VNF {
     return Objects.hash(id, srvId, sfcId, orderInSfc, reqVcpuNum, reqVmemMb, movable);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class VNF {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    srvId: ").append(toIndentedString(srvId)).append("\n");
     sb.append("    sfcId: ").append(toIndentedString(sfcId)).append("\n");

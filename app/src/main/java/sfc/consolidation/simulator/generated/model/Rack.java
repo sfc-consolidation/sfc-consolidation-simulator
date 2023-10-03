@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * Rack
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class Rack {
   @SerializedName("id")
@@ -40,11 +39,10 @@ public class Rack {
     return this;
   }
 
-  /**
+   /**
    * Get id
-   * 
    * @return id
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getId() {
     return id;
@@ -59,11 +57,10 @@ public class Rack {
     return this;
   }
 
-  /**
+   /**
    * Get srvList
-   * 
    * @return srvList
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getSrvList() {
     return srvList;
@@ -72,6 +69,7 @@ public class Rack {
   public void setSrvList(Object srvList) {
     this.srvList = srvList;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -91,11 +89,12 @@ public class Rack {
     return Objects.hash(id, srvList);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Rack {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    srvList: ").append(toIndentedString(srvList)).append("\n");
     sb.append("}");

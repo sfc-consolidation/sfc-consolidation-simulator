@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * Info
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class Info {
   @SerializedName("power")
@@ -41,6 +40,9 @@ public class Info {
   @SerializedName("memUtil")
   private Object memUtil = null;
 
+  @SerializedName("sleep")
+  private Object sleep = null;
+
   @SerializedName("sleepNum")
   private Object sleepNum = null;
 
@@ -49,11 +51,10 @@ public class Info {
     return this;
   }
 
-  /**
+   /**
    * Get power
-   * 
    * @return power
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getPower() {
     return power;
@@ -68,11 +69,10 @@ public class Info {
     return this;
   }
 
-  /**
+   /**
    * Get bandwidth
-   * 
    * @return bandwidth
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getBandwidth() {
     return bandwidth;
@@ -87,11 +87,10 @@ public class Info {
     return this;
   }
 
-  /**
+   /**
    * Get cpuUtil
-   * 
    * @return cpuUtil
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getCpuUtil() {
     return cpuUtil;
@@ -106,11 +105,10 @@ public class Info {
     return this;
   }
 
-  /**
+   /**
    * Get memUtil
-   * 
    * @return memUtil
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getMemUtil() {
     return memUtil;
@@ -120,16 +118,33 @@ public class Info {
     this.memUtil = memUtil;
   }
 
+  public Info sleep(Object sleep) {
+    this.sleep = sleep;
+    return this;
+  }
+
+   /**
+   * Get sleep
+   * @return sleep
+  **/
+  @Schema(required = true, description = "")
+  public Object getSleep() {
+    return sleep;
+  }
+
+  public void setSleep(Object sleep) {
+    this.sleep = sleep;
+  }
+
   public Info sleepNum(Object sleepNum) {
     this.sleepNum = sleepNum;
     return this;
   }
 
-  /**
+   /**
    * Get sleepNum
-   * 
    * @return sleepNum
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getSleepNum() {
     return sleepNum;
@@ -138,6 +153,7 @@ public class Info {
   public void setSleepNum(Object sleepNum) {
     this.sleepNum = sleepNum;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -152,23 +168,26 @@ public class Info {
         Objects.equals(this.bandwidth, info.bandwidth) &&
         Objects.equals(this.cpuUtil, info.cpuUtil) &&
         Objects.equals(this.memUtil, info.memUtil) &&
+        Objects.equals(this.sleep, info.sleep) &&
         Objects.equals(this.sleepNum, info.sleepNum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(power, bandwidth, cpuUtil, memUtil, sleepNum);
+    return Objects.hash(power, bandwidth, cpuUtil, memUtil, sleep, sleepNum);
   }
+
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Info {\n");
-
+    
     sb.append("    power: ").append(toIndentedString(power)).append("\n");
     sb.append("    bandwidth: ").append(toIndentedString(bandwidth)).append("\n");
     sb.append("    cpuUtil: ").append(toIndentedString(cpuUtil)).append("\n");
     sb.append("    memUtil: ").append(toIndentedString(memUtil)).append("\n");
+    sb.append("    sleep: ").append(toIndentedString(sleep)).append("\n");
     sb.append("    sleepNum: ").append(toIndentedString(sleepNum)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * Action
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class Action {
   @SerializedName("vnfId")
@@ -40,11 +39,10 @@ public class Action {
     return this;
   }
 
-  /**
+   /**
    * Get vnfId
-   * 
    * @return vnfId
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getVnfId() {
     return vnfId;
@@ -59,11 +57,10 @@ public class Action {
     return this;
   }
 
-  /**
+   /**
    * Get srvId
-   * 
    * @return srvId
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getSrvId() {
     return srvId;
@@ -72,6 +69,7 @@ public class Action {
   public void setSrvId(Object srvId) {
     this.srvId = srvId;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -91,11 +89,12 @@ public class Action {
     return Objects.hash(vnfId, srvId);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Action {\n");
-
+    
     sb.append("    vnfId: ").append(toIndentedString(vnfId)).append("\n");
     sb.append("    srvId: ").append(toIndentedString(srvId)).append("\n");
     sb.append("}");

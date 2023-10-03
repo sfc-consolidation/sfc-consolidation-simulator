@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * SFC
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class SFC {
   @SerializedName("id")
@@ -40,11 +39,10 @@ public class SFC {
     return this;
   }
 
-  /**
+   /**
    * Get id
-   * 
    * @return id
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getId() {
     return id;
@@ -59,11 +57,10 @@ public class SFC {
     return this;
   }
 
-  /**
+   /**
    * Get length
-   * 
    * @return length
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getLength() {
     return length;
@@ -72,6 +69,7 @@ public class SFC {
   public void setLength(Object length) {
     this.length = length;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -91,11 +89,12 @@ public class SFC {
     return Objects.hash(id, length);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SFC {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    length: ").append(toIndentedString(length)).append("\n");
     sb.append("}");

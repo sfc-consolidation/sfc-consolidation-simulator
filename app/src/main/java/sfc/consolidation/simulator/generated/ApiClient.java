@@ -42,25 +42,23 @@ public class ApiClient {
 
   public ApiClient(String[] authNames) {
     this();
-    for (String authName : authNames) {
+    for(String authName : authNames) {
       throw new RuntimeException("auth name \"" + authName + "\" not found in available auth names");
     }
   }
 
   /**
    * Basic constructor for single auth name
-   * 
    * @param authName Authentication name
    */
   public ApiClient(String authName) {
-    this(new String[] { authName });
+    this(new String[]{authName});
   }
 
   /**
    * Helper constructor for single api key
-   * 
    * @param authName Authentication name
-   * @param apiKey   API key
+   * @param apiKey API key
    */
   public ApiClient(String authName, String apiKey) {
     this(authName);
@@ -69,32 +67,30 @@ public class ApiClient {
 
   /**
    * Helper constructor for single basic auth or password oauth2
-   * 
    * @param authName Authentication name
    * @param username Username
    * @param password Password
    */
   public ApiClient(String authName, String username, String password) {
     this(authName);
-    this.setCredentials(username, password);
+    this.setCredentials(username,  password);
   }
 
   /**
    * Helper constructor for single password oauth2
-   * 
    * @param authName Authentication name
    * @param clientId Client ID
-   * @param secret   Client Secret
+   * @param secret Client Secret
    * @param username Username
    * @param password Password
    */
   public ApiClient(String authName, String clientId, String secret, String username, String password) {
     this(authName);
     this.getTokenEndPoint()
-        .setClientId(clientId)
-        .setClientSecret(secret)
-        .setUsername(username)
-        .setPassword(password);
+      .setClientId(clientId)
+      .setClientSecret(secret)
+      .setUsername(username)
+      .setPassword(password);
   }
 
   public void createDefaultAdapter() {
@@ -105,17 +101,18 @@ public class ApiClient {
     if (!baseUrl.endsWith("/"))
       baseUrl = baseUrl + "/";
 
-    adapterBuilder = new Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(ScalarsConverterFactory.create())
-        .addConverterFactory(GsonCustomConverterFactory.create(json.getGson()));
+    adapterBuilder = new Retrofit
+      .Builder()
+      .baseUrl(baseUrl)
+      .addConverterFactory(ScalarsConverterFactory.create())
+      .addConverterFactory(GsonCustomConverterFactory.create(json.getGson()));
   }
 
   public <S> S createService(Class<S> serviceClass) {
     return adapterBuilder
-        .client(okBuilder.build())
-        .build()
-        .create(serviceClass);
+      .client(okBuilder.build())
+      .build()
+      .create(serviceClass);
   }
 
   public ApiClient setDateFormat(DateFormat dateFormat) {
@@ -138,14 +135,14 @@ public class ApiClient {
     return this;
   }
 
+
   /**
    * Helper method to configure the first api key found
-   * 
    * @param apiKey API key
    * @return ApiClient
    */
   public ApiClient setApiKey(String apiKey) {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       if (apiAuthorization instanceof ApiKeyAuth) {
         ApiKeyAuth keyAuth = (ApiKeyAuth) apiAuthorization;
         keyAuth.setApiKey(apiKey);
@@ -156,15 +153,13 @@ public class ApiClient {
   }
 
   /**
-   * Helper method to configure the username/password for basic auth or password
-   * oauth
-   * 
+   * Helper method to configure the username/password for basic auth or password oauth
    * @param username Username
    * @param password Password
    * @return ApiClient
    */
   public ApiClient setCredentials(String username, String password) {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       if (apiAuthorization instanceof HttpBasicAuth) {
         HttpBasicAuth basicAuth = (HttpBasicAuth) apiAuthorization;
         basicAuth.setCredentials(username, password);
@@ -180,13 +175,11 @@ public class ApiClient {
   }
 
   /**
-   * Helper method to configure the token endpoint of the first oauth found in the
-   * apiAuthorizations (there should be only one)
-   * 
+   * Helper method to configure the token endpoint of the first oauth found in the apiAuthorizations (there should be only one)
    * @return Token request builder
    */
   public TokenRequestBuilder getTokenEndPoint() {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       if (apiAuthorization instanceof OAuth) {
         OAuth oauth = (OAuth) apiAuthorization;
         return oauth.getTokenRequestBuilder();
@@ -196,13 +189,11 @@ public class ApiClient {
   }
 
   /**
-   * Helper method to configure authorization endpoint of the first oauth found in
-   * the apiAuthorizations (there should be only one)
-   * 
+   * Helper method to configure authorization endpoint of the first oauth found in the apiAuthorizations (there should be only one)
    * @return Authentication request builder
    */
   public AuthenticationRequestBuilder getAuthorizationEndPoint() {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       if (apiAuthorization instanceof OAuth) {
         OAuth oauth = (OAuth) apiAuthorization;
         return oauth.getAuthenticationRequestBuilder();
@@ -212,14 +203,12 @@ public class ApiClient {
   }
 
   /**
-   * Helper method to pre-set the oauth access token of the first oauth found in
-   * the apiAuthorizations (there should be only one)
-   * 
+   * Helper method to pre-set the oauth access token of the first oauth found in the apiAuthorizations (there should be only one)
    * @param accessToken Access token
    * @return ApiClient
    */
   public ApiClient setAccessToken(String accessToken) {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       if (apiAuthorization instanceof OAuth) {
         OAuth oauth = (OAuth) apiAuthorization;
         oauth.setAccessToken(accessToken);
@@ -231,23 +220,22 @@ public class ApiClient {
 
   /**
    * Helper method to configure the oauth accessCode/implicit flow parameters
-   * 
-   * @param clientId     Client ID
+   * @param clientId Client ID
    * @param clientSecret Client secret
-   * @param redirectURI  Redirect URI
+   * @param redirectURI Redirect URI
    * @return ApiClient
    */
   public ApiClient configureAuthorizationFlow(String clientId, String clientSecret, String redirectURI) {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       if (apiAuthorization instanceof OAuth) {
         OAuth oauth = (OAuth) apiAuthorization;
         oauth.getTokenRequestBuilder()
-            .setClientId(clientId)
-            .setClientSecret(clientSecret)
-            .setRedirectURI(redirectURI);
+          .setClientId(clientId)
+          .setClientSecret(clientSecret)
+          .setRedirectURI(redirectURI);
         oauth.getAuthenticationRequestBuilder()
-            .setClientId(clientId)
-            .setRedirectURI(redirectURI);
+          .setClientId(clientId)
+          .setRedirectURI(redirectURI);
         return this;
       }
     }
@@ -256,12 +244,11 @@ public class ApiClient {
 
   /**
    * Configures a listener which is notified when a new access token is received.
-   * 
    * @param accessTokenListener Access token listener
    * @return ApiClient
    */
   public ApiClient registerAccessTokenListener(AccessTokenListener accessTokenListener) {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       if (apiAuthorization instanceof OAuth) {
         OAuth oauth = (OAuth) apiAuthorization;
         oauth.registerAccessTokenListener(accessTokenListener);
@@ -273,8 +260,7 @@ public class ApiClient {
 
   /**
    * Adds an authorization to be used by the client
-   * 
-   * @param authName      Authentication name
+   * @param authName Authentication name
    * @param authorization Authorization interceptor
    * @return ApiClient
    */
@@ -310,15 +296,13 @@ public class ApiClient {
   }
 
   public void addAuthsToOkBuilder(OkHttpClient.Builder okBuilder) {
-    for (Interceptor apiAuthorization : apiAuthorizations.values()) {
+    for(Interceptor apiAuthorization : apiAuthorizations.values()) {
       okBuilder.addInterceptor(apiAuthorization);
     }
   }
 
   /**
-   * Clones the okBuilder given in parameter, adds the auth interceptors and uses
-   * it to configure the Retrofit
-   * 
+   * Clones the okBuilder given in parameter, adds the auth interceptors and uses it to configure the Retrofit
    * @param okClient An instance of OK HTTP client
    */
   public void configureFromOkclient(OkHttpClient okClient) {
@@ -341,18 +325,19 @@ class GsonResponseBodyConverterToString<T> implements Converter<ResponseBody, T>
     this.type = type;
   }
 
-  @Override
-  public T convert(ResponseBody value) throws IOException {
+  @Override public T convert(ResponseBody value) throws IOException {
     String returned = value.string();
     try {
       return gson.fromJson(returned, type);
-    } catch (JsonParseException e) {
+    }
+    catch (JsonParseException e) {
       return (T) returned;
     }
   }
 }
 
-class GsonCustomConverterFactory extends Converter.Factory {
+class GsonCustomConverterFactory extends Converter.Factory
+{
   private final Gson gson;
   private final GsonConverterFactory gsonConverterFactory;
 
@@ -376,8 +361,7 @@ class GsonCustomConverterFactory extends Converter.Factory {
   }
 
   @Override
-  public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations,
-      Annotation[] methodAnnotations, Retrofit retrofit) {
+  public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
     return gsonConverterFactory.requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
   }
 }

@@ -48,13 +48,12 @@ public class App implements Runnable {
     Agent agent = new Agent(algorithm);
 
     // 5. run Simulation.
-    // for (int i = 1; i < Constants.MAX_EPISODE_LEN; ++i) { (TODO: Change)
-    for (int i = 1; i < 2; ++i) {
+    for (int i = 1; i < Constants.MAX_EPISODE_LEN; ++i) {
       states.add(state);
       Optional<Action> action = agent.inference(state);
       if (!action.isPresent()) {
-        actions.add(new Action()); // TODO
-        infos.add(new Info()); // TODO
+        actions.add(new Action());
+        infos.add(new Info());
         break;
       } else {
         actions.add(action.get());

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.cloudsimplus.core.CloudSimPlus;
+import org.cloudsimplus.resources.Pe;
 import org.cloudsimplus.resources.PeSimple;
 import org.cloudsimplus.vms.network.NetworkVm;
 import org.cloudsimplus.vms.HostResourceStats;
@@ -55,18 +56,6 @@ public class Env {
   private static final int NUMBER_OF_PACKETS_TO_SEND = 1;
   private static final long PACKET_DATA_LENGTH_IN_BYTES = 1000;
 
-  private State readFile(String topology_path) {
-    try {
-      ObjectMapper om = new ObjectMapper();
-      State s = om.readValue(new File(topology_path), State.class);
-      return s;
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.out.print(e);
-      return null;
-    }
-  }
-
   public Env(String topology_path) {
     // If list is null, generate below default setup.
     if (topology_path == null) {
@@ -92,18 +81,44 @@ public class Env {
     final List<SFC> sfcList = state.getSfcList();
     final List<VNF> vnfList = state.getVnfList();
 
+    CloudSimPlus simulator = new CloudSimPlus();
+
+    // 0. Setup ClientDc
+    // This client is used for generating SFC traffic.
+    List<Pe> clientPeList = Collections.nCopies(Constants.MAX_SRV_VCPU_NUM, new PeSimple(Constants.VCPU_MIPS));
+    NetworkHost clientHost = new NetworkHost(
+        Constants.MAX_SRV_VMEM_MB,
+        Constants.SRV_BW,
+        GeneratorSingleton.getStorageMb(Constants.MAX_SRV_VMEM_MB),
+        clientPeList);
+    clientHost.setId(-1);
+    NetworkDatacenter ClientDc = new NetworkDatacenter(simulator, List.of(clientHost));
+    ClientDc.setSchedulingInterval(SCHEDULING_INTERVAL);
+    DatacenterBroker clientBroker = new DatacenterBrokerSimple(simulator);
+    EdgeSwitch clientSwitch = new EdgeSwitch(simulator, ClientDc);
+    ClientDc.addSwitch(clientSwitch);
+    clientSwitch.connectHost(clientHost);
+    NetworkVm clientVm = new NetworkVm(Constants.VCPU_MIPS, Constants.MAX_SRV_VCPU_NUM);
+    clientVm.setId(-1);
+    clientHost.createVm(clientVm);
+    NetworkCloudlet clientCloudlet = new NetworkCloudlet(TASK_LENGTH, Constants.VCPU_MIPS);
+    clientCloudlet.setId(-1);
+    clientCloudlet
+        .setUtilizationModel(new UtilizationModelFull())
+        .setVm(clientVm)
+        .setBroker(clientVm.getBroker());
+
     // 1. Setup SrvList.
     for (SRV srv : srvList) {
       NetworkHost host = new NetworkHost(
           srv.getTotVmemMb(),
           Constants.SRV_BW,
           GeneratorSingleton.getStorageMb(srv.getTotVmemMb()),
-          Collections.nCopies(Constants.VCPU_MIPS, new PeSimple(srv.getTotVcpuNum())));
+          Collections.nCopies(srv.getTotVcpuNum(), new PeSimple(Constants.VCPU_MIPS)));
 
       host.setRamProvisioner(new ResourceProvisionerSimple())
           .setBwProvisioner(new ResourceProvisionerSimple())
           .setVmScheduler(new VmSchedulerTimeShared());
-      // 👇 TODO: shutdown / sleep을 적용하는 것도 고려할지 생각해야할 듯.
       PowerModelHost pm = new PowerModelHostSimple(
           GeneratorSingleton.getMaxPower(srv.getTotVcpuNum(), srv.getTotVmemMb()),
           GeneratorSingleton.getIdlePower(srv.getTotVcpuNum(), srv.getTotVmemMb()));
@@ -113,7 +128,6 @@ public class Env {
     }
 
     // 2. Setup CloudSimPlus simulator and NetworkDatacenter.
-    CloudSimPlus simulator = new CloudSimPlus();
     NetworkDatacenter dc = new NetworkDatacenter(simulator, srvList.stream().map(SRV::getHost).toList());
     dc.setSchedulingInterval(SCHEDULING_INTERVAL);
 
@@ -162,17 +176,30 @@ public class Env {
       List<VNF> vl = sfc.getVNFList(vnfList).stream().sorted(Comparator.comparingInt(VNF::getOrderInSfc)).toList();
       List<NetworkVm> vml = vl.stream().map(VNF::getVm).toList();
       List<NetworkCloudlet> cl = vl.stream().map(VNF::getCloudlet).toList();
-      for (int i = 0; i < cl.size() - 1; i++) {
-        addExecutionTask(cl.get(i));
-        addSendTask(cl.get(i), cl.get(i + 1));
-        addReceiveTask(cl.get(i + 1), cl.get(i));
-      }
-      if (cl.size() > 0)
+
+      if (cl.size() > 0) {
+        addSendTask(clientCloudlet, cl.get(0));
+        addReceiveTask(cl.get(0), clientCloudlet);
+
+        for (int i = 0; i < cl.size() - 1; i++) {
+          addExecutionTask(cl.get(i));
+          addSendTask(cl.get(i), cl.get(i + 1));
+          addReceiveTask(cl.get(i + 1), cl.get(i));
+        }
+
         addExecutionTask(cl.get(cl.size() - 1));
+        addSendTask(cl.get(cl.size() - 1), clientCloudlet);
+        addReceiveTask(clientCloudlet, cl.get(cl.size() - 1));
+
+      }
 
       sfc.getBroker().submitVmList(vml);
       sfc.getBroker().submitCloudletList(cl);
     }
+
+    addExecutionTask(clientCloudlet);
+    clientBroker.submitVm(clientVm);
+    clientBroker.submitCloudlet(clientCloudlet);
 
     // 7. Run simulation.
     simulator.start();
@@ -207,16 +234,27 @@ public class Env {
     List<Float> cpuUtilList = new ArrayList<>();
     List<Float> memUtilList = new ArrayList<>();
     List<Integer> bwUtilList = new ArrayList<>();
-    int sleepNum = 0; // TODO: change
+    List<Boolean> sleepList = new ArrayList<>();
+    int sleepNum = 0;
 
     for (Rack rack : curState.getRackList()) {
       for (SRV srv : rack.getSrvList()) {
-        final var host = srv.getHost();
-        final HostResourceStats cpuStats = host.getCpuUtilizationStats();
-        final double memUtil = host.getRam().getPercentUtilization();
-        final double cpuUtil = cpuStats.getMean();
-        final double watts = host.getPowerModel().getPower(cpuUtil);
-        final double bwUtil = host.getBwUtilization();
+        var host = srv.getHost();
+        HostResourceStats cpuStats = host.getCpuUtilizationStats();
+        double memUtil = host.getRam().getPercentUtilization();
+        double cpuUtil = cpuStats.getMean();
+        double watts = host.getPowerModel().getPower(cpuUtil);
+        double bwUtil = host.getBwUtilization();
+
+        if (srv.getVNFList(curState.getVnfList()).isEmpty() && srv.isSleepable()) {
+          sleepNum++;
+          watts = watts / 10;
+          cpuUtil = cpuUtil / 10;
+          memUtil = memUtil / 10;
+          sleepList.add(true);
+        } else {
+          sleepList.add(false);
+        }
         powerList.add((float) watts);
         cpuUtilList.add((float) cpuUtil);
         memUtilList.add((float) memUtil);
@@ -227,25 +265,9 @@ public class Env {
     info.setMemUtilList(memUtilList);
     info.setPowerList(powerList);
     info.setBwUtilList(bwUtilList);
+    info.setSleepList(sleepList);
     info.setSleepNum(sleepNum);
     return info;
-  }
-
-  private void getPowerConsumption(State state) {
-    for (Rack rack : state.getRackList()) {
-      for (SRV srv : rack.getSrvList()) {
-        final var host = srv.getHost();
-        final HostResourceStats cpuStats = host.getCpuUtilizationStats();
-
-        final double utilizationPercentMean = cpuStats.getMean();
-        final double watts = host.getPowerModel().getPower(utilizationPercentMean);
-        final double bwUtil = host.getBwUtilization();
-
-        System.out.printf(
-            "[Host %d] CPU Usage: %6.1f%% | Power Consumption: %8.0f W | Bandwidth Util: %8.0f%n",
-            host.getId(), utilizationPercentMean * 100, watts, bwUtil);
-      }
-    }
   }
 
   /**
@@ -306,4 +328,15 @@ public class Env {
     System.out.println("Simulation finished!");
   }
 
+  private State readFile(String topology_path) {
+    try {
+      ObjectMapper om = new ObjectMapper();
+      State s = om.readValue(new File(topology_path), State.class);
+      return s;
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.print(e);
+      return null;
+    }
+  }
 }

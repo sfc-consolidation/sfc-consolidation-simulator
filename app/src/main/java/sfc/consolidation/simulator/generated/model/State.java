@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * State
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T12:35:12.047132721+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class State {
   @SerializedName("rackList")
@@ -43,11 +42,10 @@ public class State {
     return this;
   }
 
-  /**
+   /**
    * Get rackList
-   * 
    * @return rackList
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getRackList() {
     return rackList;
@@ -62,11 +60,10 @@ public class State {
     return this;
   }
 
-  /**
+   /**
    * Get sfcList
-   * 
    * @return sfcList
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getSfcList() {
     return sfcList;
@@ -81,11 +78,10 @@ public class State {
     return this;
   }
 
-  /**
+   /**
    * Get vnfList
-   * 
    * @return vnfList
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getVnfList() {
     return vnfList;
@@ -94,6 +90,7 @@ public class State {
   public void setVnfList(Object vnfList) {
     this.vnfList = vnfList;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -114,11 +111,12 @@ public class State {
     return Objects.hash(rackList, sfcList, vnfList);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class State {\n");
-
+    
     sb.append("    rackList: ").append(toIndentedString(rackList)).append("\n");
     sb.append("    sfcList: ").append(toIndentedString(sfcList)).append("\n");
     sb.append("    vnfList: ").append(toIndentedString(vnfList)).append("\n");

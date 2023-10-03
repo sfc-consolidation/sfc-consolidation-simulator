@@ -42,8 +42,8 @@ public class State {
     }
   }
 
-  public sfc.consolidation.simulator.generated.model.StateInput toReqForm() {
-    var state = new sfc.consolidation.simulator.generated.model.StateInput();
+  public sfc.consolidation.simulator.generated.model.State toReqForm() {
+    var state = new sfc.consolidation.simulator.generated.model.State();
     state.setRackList(rackList.stream().map(Rack::toReqForm).toList());
     state.setSfcList(sfcList.stream().map(SFC::toReqForm).toList());
     state.setVnfList(vnfList.stream().map(VNF::toReqForm).toList());

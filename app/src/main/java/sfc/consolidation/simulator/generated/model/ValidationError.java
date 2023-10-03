@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * ValidationError
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class ValidationError {
   @SerializedName("loc")
@@ -43,11 +42,10 @@ public class ValidationError {
     return this;
   }
 
-  /**
+   /**
    * Get loc
-   * 
    * @return loc
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getLoc() {
     return loc;
@@ -62,11 +60,10 @@ public class ValidationError {
     return this;
   }
 
-  /**
+   /**
    * Get msg
-   * 
    * @return msg
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getMsg() {
     return msg;
@@ -81,11 +78,10 @@ public class ValidationError {
     return this;
   }
 
-  /**
+   /**
    * Get type
-   * 
    * @return type
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getType() {
     return type;
@@ -94,6 +90,7 @@ public class ValidationError {
   public void setType(Object type) {
     this.type = type;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -114,11 +111,12 @@ public class ValidationError {
     return Objects.hash(loc, msg, type);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ValidationError {\n");
-
+    
     sb.append("    loc: ").append(toIndentedString(loc)).append("\n");
     sb.append("    msg: ").append(toIndentedString(msg)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");

@@ -11,6 +11,7 @@ public class Info {
   private List<Float> cpuUtilList = new ArrayList<>();
   private List<Float> memUtilList = new ArrayList<>();
   private List<Integer> bwUtilList = new ArrayList<>();
+  private List<Boolean> sleepList = new ArrayList<>();
   private int sleepNum;
 
   public sfc.consolidation.simulator.generated.model.Info toReqForm() {
@@ -19,15 +20,20 @@ public class Info {
     info.setCpuUtil(cpuUtilList);
     info.setMemUtil(memUtilList);
     info.setBandwidth(bwUtilList);
+    info.setSleep(sleepList);
     info.setSleepNum(sleepNum);
     return info;
   }
 
   public void print() {
     for (int i = 0; i < powerList.size(); ++i) {
-      System.out.printf("[Host %d] Power: %8.1f W, CPU: %5.1f %%, MEM: %5.1f %%, BW: %d Mpbs%n", i, powerList.get(i),
+      System.out.printf("[Host %d] #Sleep: %s, Power: %8.1f W, CPU: %5.1f %%, MEM: %5.1f %%, BW: %10d Mpbs%n",
+          i,
+          sleepList.get(i) ? "💤" : "🌞",
+          powerList.get(i),
           cpuUtilList.get(i) * 100,
-          memUtilList.get(i) * 100, bwUtilList.get(i));
+          memUtilList.get(i) * 100,
+          bwUtilList.get(i));
     }
   }
 }

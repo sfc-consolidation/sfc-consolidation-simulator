@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import sfc.consolidation.simulator.generated.api.DefaultApi;
-import sfc.consolidation.simulator.generated.model.EpisodeInput;
-import sfc.consolidation.simulator.generated.model.StateInput;
-import sfc.consolidation.simulator.generated.model.StepInput;
+import sfc.consolidation.simulator.generated.model.Episode;
+import sfc.consolidation.simulator.generated.model.Step;
 import sfc.consolidation.simulator.types.Action;
 import sfc.consolidation.simulator.types.State;
 import sfc.consolidation.simulator.types.Info;
@@ -53,12 +52,17 @@ public class Agent {
       return inferenceRandom(state);
 
     DefaultApi api = ApiSingletone.getInstance();
-    StateInput si = state.toReqForm();
+    sfc.consolidation.simulator.generated.model.State si = state.toReqForm();
 
     try {
       var req = api.inferenceInferencePost(si, apiAlgorithm);
       var res = req.execute().body();
-      return Optional.ofNullable(Action.fromResForm(res));
+      Action action = Action.fromResForm(res);
+      // if vnf movable is false, return empty
+      if (!state.getVnfList().get(action.getVnfId()).isMovable()) {
+        return Optional.empty();
+      }
+      return Optional.ofNullable(action);
     } catch (Exception e) {
       e.printStackTrace();
       return Optional.empty();
@@ -77,21 +81,19 @@ public class Agent {
 
   public void submit(List<State> stateList, List<Action> actionList, List<Info> infoList) {
     DefaultApi api = ApiSingletone.getInstance();
-    EpisodeInput ei = new EpisodeInput();
-    List<StepInput> siList = new ArrayList<>();
+    Episode ei = new Episode();
+    List<Step> siList = new ArrayList<>();
     for (int i = 0; i < actionList.size(); ++i) {
-      StepInput si = new StepInput();
+      Step si = new Step();
       si.setState(stateList.get(i).toReqForm());
       si.setAction(actionList.get(i).toReqForm());
       si.setInfo(infoList.get(i).toReqForm());
       siList.add(si);
     }
     ei.setSteps(siList);
-    System.out.println(ei);
     try {
       var req = api.saveSaveEpisodePost(ei, apiAlgorithm);
-      var res = req.execute();
-      System.out.println(res.body());
+      req.execute();
     } catch (Exception e) {
       e.printStackTrace();
     }

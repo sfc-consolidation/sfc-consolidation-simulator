@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * HTTPValidationError
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T19:59:40.601719331+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class HTTPValidationError {
   @SerializedName("detail")
@@ -37,11 +36,10 @@ public class HTTPValidationError {
     return this;
   }
 
-  /**
+   /**
    * Get detail
-   * 
    * @return detail
-   **/
+  **/
   @Schema(description = "")
   public Object getDetail() {
     return detail;
@@ -50,6 +48,7 @@ public class HTTPValidationError {
   public void setDetail(Object detail) {
     this.detail = detail;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -68,11 +67,12 @@ public class HTTPValidationError {
     return Objects.hash(detail);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class HTTPValidationError {\n");
-
+    
     sb.append("    detail: ").append(toIndentedString(detail)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -21,12 +21,11 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
 /**
  * Episode
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T12:35:12.047132721+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class Episode {
   @SerializedName("steps")
@@ -37,11 +36,10 @@ public class Episode {
     return this;
   }
 
-  /**
+   /**
    * Get steps
-   * 
    * @return steps
-   **/
+  **/
   @Schema(required = true, description = "")
   public Object getSteps() {
     return steps;
@@ -50,6 +48,7 @@ public class Episode {
   public void setSteps(Object steps) {
     this.steps = steps;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -68,11 +67,12 @@ public class Episode {
     return Objects.hash(steps);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Episode {\n");
-
+    
     sb.append("    steps: ").append(toIndentedString(steps)).append("\n");
     sb.append("}");
     return sb.toString();

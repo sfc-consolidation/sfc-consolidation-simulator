@@ -14,9 +14,6 @@ package sfc.consolidation.simulator.generated.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import sfc.consolidation.simulator.generated.model.Action;
-import sfc.consolidation.simulator.generated.model.Info;
-import sfc.consolidation.simulator.generated.model.State;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -24,12 +21,14 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-
+import sfc.consolidation.simulator.generated.model.Action;
+import sfc.consolidation.simulator.generated.model.Info;
+import sfc.consolidation.simulator.generated.model.State;
 /**
  * Step
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-09-25T12:35:12.047132721+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-03T10:19:01.754399281+09:00[Asia/Seoul]")
 
 public class Step {
   @SerializedName("state")
@@ -46,11 +45,10 @@ public class Step {
     return this;
   }
 
-  /**
+   /**
    * Get state
-   * 
    * @return state
-   **/
+  **/
   @Schema(required = true, description = "")
   public State getState() {
     return state;
@@ -65,11 +63,10 @@ public class Step {
     return this;
   }
 
-  /**
+   /**
    * Get action
-   * 
    * @return action
-   **/
+  **/
   @Schema(required = true, description = "")
   public Action getAction() {
     return action;
@@ -84,11 +81,10 @@ public class Step {
     return this;
   }
 
-  /**
+   /**
    * Get info
-   * 
    * @return info
-   **/
+  **/
   @Schema(required = true, description = "")
   public Info getInfo() {
     return info;
@@ -97,6 +93,7 @@ public class Step {
   public void setInfo(Info info) {
     this.info = info;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -117,11 +114,12 @@ public class Step {
     return Objects.hash(state, action, info);
   }
 
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Step {\n");
-
+    
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
     sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("    info: ").append(toIndentedString(info)).append("\n");
