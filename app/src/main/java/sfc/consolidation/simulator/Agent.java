@@ -58,10 +58,7 @@ public class Agent {
       var req = api.inferenceInferencePost(si, apiAlgorithm);
       var res = req.execute().body();
       Action action = Action.fromResForm(res);
-      // if vnf movable is false, return empty
-      if (!state.getVnfList().get(action.getVnfId()).isMovable()) {
-        return Optional.empty();
-      }
+
       return Optional.ofNullable(action);
     } catch (Exception e) {
       e.printStackTrace();

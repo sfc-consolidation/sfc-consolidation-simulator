@@ -29,7 +29,7 @@ public class Info {
 
   public void print() {
     if (!success) {
-      System.out.println("Failed to organize State.");
+      System.out.println("Failed to organize Info.");
       return;
     }
     for (int i = 0; i < powerList.size(); ++i) {

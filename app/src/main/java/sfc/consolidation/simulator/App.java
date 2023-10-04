@@ -52,7 +52,7 @@ public class App implements Runnable {
     Agent agent = new Agent(algorithm);
 
     // 5. run Simulation.
-    for (int i = 1; i < Constants.MAX_EPISODE_LEN; ++i) {
+    for (int i = 1; i < Constants.MAX_EPISODE_LEN; i++) {
       states.add(state);
       Optional<Action> action = agent.inference(state);
       if (!action.isPresent()) {
@@ -70,13 +70,15 @@ public class App implements Runnable {
     // Print Debug Info.
     if (debug) {
       for (int i = 0; i < actions.size(); ++i) {
-        System.out.printf("Step: %d%n", i);
+        System.out.printf("Step: %d%n", i + 1);
         states.get(i).print();
         actions.get(i).print();
         infos.get(i).print();
       }
-      System.out.printf("Init State: %s%n", states.get(0).toString());
-      System.out.printf("Final State: %s%n", state.toString());
+      System.out.println("Initial State:");
+      states.get(0).print();
+      System.out.println("Final State:");
+      state.print();
     }
 
     // Upload results to remote DB.

@@ -34,9 +34,6 @@ public class State {
     List<SRV> srvList = getSrvList();
     System.out.printf("Rack: %d, SRV: %d, SFC: %d, VNF: %d%n", rackList.size(), srvList.size(), sfcList.size(),
         vnfList.size());
-    for (SRV srv : srvList) {
-      System.out.printf("SRV: %s%n", srv.toString());
-    }
     for (VNF vnf : vnfList) {
       System.out.printf("VNF: %s%n", vnf.toString());
     }

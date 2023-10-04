@@ -226,19 +226,24 @@ public class Env {
     int srcVnfId = action.getVnfId();
     int srvNum = curState.getSrvList().size();
     if (tgtSrvId < 1 || tgtSrvId > srvNum) {
-      System.out.println("Invalid Action [SRV ID]");
+      System.out.println("Invalid Action [SRV ID is not exist]");
       lastIsSuccess = false;
       return curState.capture();
     }
     boolean unmatch = true;
     for (VNF vnf : curState.getVnfList()) {
       if (vnf.getId() == srcVnfId) {
+        if (!vnf.isMovable()) {
+          System.out.println("Invalid Action [VNF is not movable]");
+          lastIsSuccess = false;
+          return curState.capture();
+        }
         vnf.setSrvId(tgtSrvId);
         unmatch = false;
       }
     }
     if (unmatch) {
-      System.out.println("Invalid Action [VNF ID]");
+      System.out.println("Invalid Action [VNF ID is not exist]");
       lastIsSuccess = false;
       return curState.capture();
     }
