@@ -1,4 +1,5 @@
 src/main/AndroidManifest.xml
+src/test/java/sfc/consolidation/simulator/generated
 .swagger-codegen-ignore
 .travis.yml
 build.sbt

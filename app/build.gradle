@@ -10,6 +10,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
@@ -50,6 +51,7 @@ dependencies {
     
     // CloudSimPlus
     implementation files('libs/cloudsimplus-8.5.0.jar')
+    implementation "org.apache.commons:commons-math3:3.6.1"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
@@ -79,6 +81,19 @@ task runExample(type: JavaExec) {
 }
 
 task genInitState(type: JavaExec) {
-  mainClass = 'sfc.consolidation.simulator.utils.InitStateGenerator'
-  classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'sfc.consolidation.simulator.utils.InitStateGenerator'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+shadowJar {
+    archiveBaseName.set('SFC_Consolidation_Simulator')
+    archiveVersion.set('0.0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes(
+            'Implementation-Title': 'SFC_Consolidation_Simulator',
+            'Implementation-Version': '0.0.1',    
+            'Main-Class': 'sfc.consolidation.simulator.App'
+        )
+    }
 }

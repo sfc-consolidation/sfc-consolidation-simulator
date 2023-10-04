@@ -39,3 +39,11 @@ $ java -jar app/libs/swagger-codegen-cli.jar generate \
 --model-package sfc.consolidation.simulator.generated.model \
 --api-package sfc.consolidation.simulator.generated.api
 ```
+
+### Build and Docker Run
+
+```bash
+$ ./gradlew build
+$ docker build -t sfc-consolidation-simulator:0.0.1 .
+$ docker run --network="host" sfc-consolidation-simulator:0.0.1
+```
