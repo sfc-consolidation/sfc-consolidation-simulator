@@ -12,7 +12,7 @@
 
 package sfc.consolidation.simulator.generated;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-04T08:56:32.920367888+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-04T13:41:14.461052304+09:00[Asia/Seoul]")
 public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).

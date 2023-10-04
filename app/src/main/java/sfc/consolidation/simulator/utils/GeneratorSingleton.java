@@ -125,17 +125,16 @@ public class GeneratorSingleton {
     int totSrvNum = 0;
 
     List<Rack> rackList = new ArrayList<>();
-    for (int i = 0; i < rackNum; ++i) {
+    for (int i = 1; i <= rackNum; ++i) {
       List<SRV> srvList = new ArrayList<>();
       int srvNum = RandomSingleton.getInstance().nextInt(minSrv, maxSrv + 1);
-      for (int j = 0; j < srvNum; ++j) {
+      for (int j = 1; j <= srvNum; ++j) {
         SRV srv = new SRV();
-        srv.setId(totSrvNum);
+        srv.setId(++totSrvNum);
         srv.setTotVcpuNum(RandomSingleton.getInstance().nextInt(minSrvVcpu, maxSrvVcpu + 1));
         srv.setTotVmemMb(RandomSingleton.getInstance().nextInt(minSrvVmem, maxSrvVmem + 1));
         srv.setSleepable(RandomSingleton.getInstance().nextFloat() < Constants.SRV_SLEEPABLE_PROB);
         srvList.add(srv);
-        totSrvNum++;
       }
       Rack rack = new Rack();
       rack.setId(i);
@@ -143,24 +142,31 @@ public class GeneratorSingleton {
       rackList.add(rack);
     }
     List<SFC> sfcList = new ArrayList<>();
-    for (int i = 0; i < sfcNum; ++i) {
+    for (int i = 1; i <= sfcNum; ++i) {
       SFC sfc = new SFC();
       sfc.setId(i);
       sfcList.add(sfc);
     }
-    // TODO: vnf의 분배가 불가능한 경우 어쩔 것인가?
     List<VNF> vnfList = new ArrayList<>();
-    for (int i = 0; i < vnfNum; ++i) {
+    for (int i = 1; i <= vnfNum; ++i) {
       VNF vnf = new VNF();
       vnf.setId(i);
       vnf.setReqVcpuNum(RandomSingleton.getInstance().nextInt(minVnfVcpu, maxVnfVcpu + 1));
       vnf.setReqVmemMb(RandomSingleton.getInstance().nextInt(minVnfVmem, maxVnfVmem + 1));
       vnf.setMovable(RandomSingleton.getInstance().nextFloat() < Constants.VNF_MOVABLE_PROB);
-      var sfcId = RandomSingleton.getInstance().nextInt(0, sfcNum);
+      var sfcId = RandomSingleton.getInstance().nextInt(1, sfcNum + 1);
       vnf.setSfcId(sfcId);
-      vnf.setOrderInSfc(sfcList.get(sfcId).getLength());
-      sfcList.get(sfcId).setLength(sfcList.get(sfcId).getLength() + 1);
-      vnf.setSrvId(RandomSingleton.getInstance().nextInt(0, totSrvNum));
+
+      for (int j = 0; j < sfcList.size(); ++j) {
+        SFC sfc = sfcList.get(j);
+        if (sfc.getId() == sfcId) {
+          sfc.setLength(sfc.getLength() + 1);
+          vnf.setOrderInSfc(sfc.getLength());
+          break;
+        }
+      }
+
+      vnf.setSrvId(RandomSingleton.getInstance().nextInt(1, totSrvNum + 1));
       vnfList.add(vnf);
     }
     State s = new State();

@@ -25,7 +25,7 @@ import java.io.IOException;
  * Info
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-04T08:56:32.920367888+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-04T13:41:14.461052304+09:00[Asia/Seoul]")
 
 public class Info {
   @SerializedName("power")
@@ -45,6 +45,9 @@ public class Info {
 
   @SerializedName("sleepNum")
   private Object sleepNum = null;
+
+  @SerializedName("isSuccess")
+  private Object isSuccess = null;
 
   public Info power(Object power) {
     this.power = power;
@@ -154,6 +157,24 @@ public class Info {
     this.sleepNum = sleepNum;
   }
 
+  public Info isSuccess(Object isSuccess) {
+    this.isSuccess = isSuccess;
+    return this;
+  }
+
+   /**
+   * Get isSuccess
+   * @return isSuccess
+  **/
+  @Schema(required = true, description = "")
+  public Object getIsSuccess() {
+    return isSuccess;
+  }
+
+  public void setIsSuccess(Object isSuccess) {
+    this.isSuccess = isSuccess;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -169,12 +190,13 @@ public class Info {
         Objects.equals(this.cpuUtil, info.cpuUtil) &&
         Objects.equals(this.memUtil, info.memUtil) &&
         Objects.equals(this.sleep, info.sleep) &&
-        Objects.equals(this.sleepNum, info.sleepNum);
+        Objects.equals(this.sleepNum, info.sleepNum) &&
+        Objects.equals(this.isSuccess, info.isSuccess);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(power, bandwidth, cpuUtil, memUtil, sleep, sleepNum);
+    return Objects.hash(power, bandwidth, cpuUtil, memUtil, sleep, sleepNum, isSuccess);
   }
 
 
@@ -189,6 +211,7 @@ public class Info {
     sb.append("    memUtil: ").append(toIndentedString(memUtil)).append("\n");
     sb.append("    sleep: ").append(toIndentedString(sleep)).append("\n");
     sb.append("    sleepNum: ").append(toIndentedString(sleepNum)).append("\n");
+    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
     sb.append("}");
     return sb.toString();
   }

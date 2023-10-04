@@ -12,6 +12,7 @@ public class Info {
   private List<Float> memUtilList = new ArrayList<>();
   private List<Integer> bwUtilList = new ArrayList<>();
   private List<Boolean> sleepList = new ArrayList<>();
+  private boolean success;
   private int sleepNum;
 
   public sfc.consolidation.simulator.generated.model.Info toReqForm() {
@@ -22,13 +23,18 @@ public class Info {
     info.setBandwidth(bwUtilList);
     info.setSleep(sleepList);
     info.setSleepNum(sleepNum);
+    info.setIsSuccess(success);
     return info;
   }
 
   public void print() {
+    if (!success) {
+      System.out.println("Failed to organize State.");
+      return;
+    }
     for (int i = 0; i < powerList.size(); ++i) {
       System.out.printf("[Host %d] #Sleep: %s, Power: %8.1f W, CPU: %5.1f %%, MEM: %5.1f %%, BW: %10d Mpbs%n",
-          i,
+          i + 1,
           sleepList.get(i) ? "💤" : "🌞",
           powerList.get(i),
           cpuUtilList.get(i) * 100,

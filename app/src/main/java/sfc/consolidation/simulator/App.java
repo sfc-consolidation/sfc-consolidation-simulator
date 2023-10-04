@@ -23,7 +23,7 @@ public class App implements Runnable {
   @Option(names = { "-a",
       "--algorithm" }, description = "Algorithm to use", required = false, defaultValue = "RANDOM")
   static InferenceAlgorithm algorithm;
-  @Option(names = { "-d", "--debug" }, description = "Print debug info", required = false, defaultValue = "false")
+  @Option(names = { "-d", "--debug" }, description = "Print debug info", required = false, defaultValue = "true")
   static boolean debug;
   @Option(names = { "-u",
       "--upload" }, description = "Upload results to remote DB", required = false, defaultValue = "true")
@@ -44,6 +44,10 @@ public class App implements Runnable {
     Env env = new Env(file_path);
     // 3. reset Environment
     State state = env.reset();
+    if (!env.getResult().isSuccess()) {
+      System.out.println("Failed to initialize Environment.");
+      return;
+    }
     // 4. create Agent
     Agent agent = new Agent(algorithm);
 
@@ -66,11 +70,10 @@ public class App implements Runnable {
     // Print Debug Info.
     if (debug) {
       for (int i = 0; i < actions.size(); ++i) {
-        System.out.printf(
-            "Episode: %d, State: %s, Action: %s%n",
-            i + 1,
-            states.get(i).toString(),
-            actions.get(i).toString());
+        System.out.printf("Step: %d%n", i);
+        states.get(i).print();
+        actions.get(i).print();
+        infos.get(i).print();
       }
       System.out.printf("Init State: %s%n", states.get(0).toString());
       System.out.printf("Final State: %s%n", state.toString());

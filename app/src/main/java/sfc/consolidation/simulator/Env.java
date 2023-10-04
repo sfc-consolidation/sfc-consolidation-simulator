@@ -56,14 +56,16 @@ public class Env {
   private static final int NUMBER_OF_PACKETS_TO_SEND = 1;
   private static final long PACKET_DATA_LENGTH_IN_BYTES = 1000;
 
+  private boolean lastIsSuccess;
+
   public Env(String topology_path) {
     // If list is null, generate below default setup.
     if (topology_path == null) {
       curState = GeneratorSingleton.getRandomState(
           2, 2, // # racks = 2
           3, 3, // # SRVs = 3
-          5, 5, // # SFCs = 5
-          3, 3, // # VNFs = 3
+          5, 5, // # VNFs = 5
+          3, 3, // # SFCs = 3
           100, 100, // # vCPUs = 100
           32 * 1024, 32 * 1024, // # vMem = 32GB
           1, 10, // # vCPUs per VNF = 1~10
@@ -115,7 +117,7 @@ public class Env {
           Constants.SRV_BW,
           GeneratorSingleton.getStorageMb(srv.getTotVmemMb()),
           Collections.nCopies(srv.getTotVcpuNum(), new PeSimple(Constants.VCPU_MIPS)));
-
+      host.setId(srv.getId());
       host.setRamProvisioner(new ResourceProvisionerSimple())
           .setBwProvisioner(new ResourceProvisionerSimple())
           .setVmScheduler(new VmSchedulerTimeShared());
@@ -157,15 +159,16 @@ public class Env {
         vm.setCloudletScheduler(new CloudletSchedulerTimeShared());
         vm.enableUtilizationStats();
         vm.setId(vnf.getId());
-        vm.setBroker(sfcList.get(vnf.getSfcId()).getBroker());
+        SFC sfc = sfcList.stream().filter(s -> s.getId() == vnf.getSfcId()).findFirst().get();
+        vm.setBroker(sfc.getBroker());
         vnf.setVm(vm);
-        srvList.get(vnf.getSrvId()).getHost().createVm(vnf.getVm());
+        srvList.stream().filter(srv -> srv.getId() == vnf.getSrvId()).findFirst().get().getHost().createVm(vm);
 
         final var cloudlet = new NetworkCloudlet(CLOUDLET_LENGTH, vnf.getReqVcpuNum());
         cloudlet.setUtilizationModel(new UtilizationModelFull());
         cloudlet.setId(vnf.getId());
         cloudlet.setVm(vm);
-        cloudlet.setBroker(sfcList.get(vnf.getSfcId()).getBroker());
+        cloudlet.setBroker(sfc.getBroker());
         vnf.setCloudlet(cloudlet);
       }
     }
@@ -182,14 +185,14 @@ public class Env {
         addReceiveTask(cl.get(0), clientCloudlet);
 
         for (int i = 0; i < cl.size() - 1; i++) {
-          addExecutionTask(cl.get(i));
           addSendTask(cl.get(i), cl.get(i + 1));
           addReceiveTask(cl.get(i + 1), cl.get(i));
+          addExecutionTask(cl.get(i));
         }
 
-        addExecutionTask(cl.get(cl.size() - 1));
         addSendTask(cl.get(cl.size() - 1), clientCloudlet);
         addReceiveTask(clientCloudlet, cl.get(cl.size() - 1));
+        addExecutionTask(cl.get(cl.size() - 1));
 
       }
 
@@ -202,21 +205,44 @@ public class Env {
     clientBroker.submitCloudlet(clientCloudlet);
 
     // 7. Run simulation.
-    simulator.start();
+    try {
+      simulator.start();
 
-    // 8. Print results.
-    curState = state;
-    state.print();
-    showSimulationResults(dc, sfcList.stream().map(SFC::getBroker).toList());
-    getResult().print();
-    // getPowerConsumption(state);
+      // 8. Print results.
+      lastIsSuccess = true;
+      curState = state;
+      state.print();
+      showSimulationResults(dc, sfcList.stream().map(SFC::getBroker).toList());
+      getResult().print();
+    } catch (Exception e) {
+      lastIsSuccess = false;
+      curState = state;
+      state.print();
+    }
   }
 
   public State step(Action action) {
     int tgtSrvId = action.getSrvId();
     int srcVnfId = action.getVnfId();
+    int srvNum = curState.getSrvList().size();
+    if (tgtSrvId < 1 || tgtSrvId > srvNum) {
+      System.out.println("Invalid Action [SRV ID]");
+      lastIsSuccess = false;
+      return curState.capture();
+    }
+    boolean unmatch = true;
+    for (VNF vnf : curState.getVnfList()) {
+      if (vnf.getId() == srcVnfId) {
+        vnf.setSrvId(tgtSrvId);
+        unmatch = false;
+      }
+    }
+    if (unmatch) {
+      System.out.println("Invalid Action [VNF ID]");
+      lastIsSuccess = false;
+      return curState.capture();
+    }
 
-    curState.getVnfList().get(srcVnfId).setSrvId(tgtSrvId);
     setupCloudsimWithState(curState);
 
     return curState.capture();
@@ -267,6 +293,7 @@ public class Env {
     info.setBwUtilList(bwUtilList);
     info.setSleepList(sleepList);
     info.setSleepNum(sleepNum);
+    info.setSuccess(lastIsSuccess);
     return info;
   }
 

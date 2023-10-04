@@ -27,6 +27,7 @@ public class SFC {
   public SFC capture() {
     SFC temp = new SFC();
     temp.setId(id);
+    temp.setLength(length);
     return temp;
   }
 

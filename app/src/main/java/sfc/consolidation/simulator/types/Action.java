@@ -30,4 +30,8 @@ public class Action {
       return null;
     }
   }
+
+  public void print() {
+    System.out.printf("Action: VNF: %d, SRV: %d%n", vnfId, srvId);
+  }
 }

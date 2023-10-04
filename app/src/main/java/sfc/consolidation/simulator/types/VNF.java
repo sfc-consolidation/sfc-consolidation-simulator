@@ -31,6 +31,7 @@ public class VNF {
     temp.setId(id);
     temp.setSrvId(srvId);
     temp.setSfcId(sfcId);
+    temp.setOrderInSfc(orderInSfc);
     temp.setReqVcpuNum(reqVcpuNum);
     temp.setReqVmemMb(reqVmemMb);
     temp.setMovable(movable);
