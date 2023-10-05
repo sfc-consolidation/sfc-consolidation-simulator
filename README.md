@@ -29,8 +29,7 @@ $ ./gradlew run
 
 ### Add new API / Modify API
 ```bash
-$ wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.46/swagger-codegen-cli-3.0.46.jar -O swagger-codegen-cli.jar
-$ tar -xvf v3.0.46.tar.gz
+$ wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.46/swagger-codegen-cli-3.0.46.jar -O app/libs/swagger-codegen-cli.jar
 $ java -jar app/libs/swagger-codegen-cli.jar generate \
 -l java \
 -o app \

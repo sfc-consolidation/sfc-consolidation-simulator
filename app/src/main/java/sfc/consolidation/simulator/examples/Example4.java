@@ -19,9 +19,9 @@ public class Example4 {
     state.setRackList(new ArrayList<>());
     state.setSfcList(new ArrayList<>());
     state.setVnfList(new ArrayList<>());
-    Call<Action> actionRequest = api.inferenceInferencePost(state, "dqn");
     try {
-      Action response = actionRequest.execute().body();
+      var actionRequest = api.inferenceInferencePost(state, state);
+      var response = actionRequest.execute().body();
       System.out.println(response);
     } catch (Exception e) {
       e.printStackTrace();

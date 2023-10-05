@@ -173,6 +173,7 @@ public class Env {
       }
     }
 
+    addExecutionTask(clientCloudlet);
     // 6. Run packet transmission simulation to each SFC.
     for (SFC sfc : sfcList) {
       // get sfc's vnf list and sort by orderInSfc
@@ -185,14 +186,14 @@ public class Env {
         addReceiveTask(cl.get(0), clientCloudlet);
 
         for (int i = 0; i < cl.size() - 1; i++) {
+          addExecutionTask(cl.get(i));
           addSendTask(cl.get(i), cl.get(i + 1));
           addReceiveTask(cl.get(i + 1), cl.get(i));
-          addExecutionTask(cl.get(i));
         }
 
+        addExecutionTask(cl.get(cl.size() - 1));
         addSendTask(cl.get(cl.size() - 1), clientCloudlet);
         addReceiveTask(clientCloudlet, cl.get(cl.size() - 1));
-        addExecutionTask(cl.get(cl.size() - 1));
 
       }
 
@@ -200,7 +201,6 @@ public class Env {
       sfc.getBroker().submitCloudletList(cl);
     }
 
-    addExecutionTask(clientCloudlet);
     clientBroker.submitVm(clientVm);
     clientBroker.submitCloudlet(clientCloudlet);
 

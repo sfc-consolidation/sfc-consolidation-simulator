@@ -25,7 +25,7 @@ import java.io.IOException;
  * HTTPValidationError
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-04T13:41:14.461052304+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-05T04:07:07.371478955Z[Etc/UTC]")
 
 public class HTTPValidationError {
   @SerializedName("detail")

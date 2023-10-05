@@ -21,24 +21,23 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
-import sfc.consolidation.simulator.generated.model.Action;
 import sfc.consolidation.simulator.generated.model.Info;
 import sfc.consolidation.simulator.generated.model.State;
 /**
  * Step
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-04T13:41:14.461052304+09:00[Asia/Seoul]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-05T04:07:07.371478955Z[Etc/UTC]")
 
 public class Step {
   @SerializedName("state")
   private State state = null;
 
-  @SerializedName("action")
-  private Action action = null;
-
   @SerializedName("info")
   private Info info = null;
+
+  @SerializedName("action")
+  private Object action = null;
 
   public Step state(State state) {
     this.state = state;
@@ -56,24 +55,6 @@ public class Step {
 
   public void setState(State state) {
     this.state = state;
-  }
-
-  public Step action(Action action) {
-    this.action = action;
-    return this;
-  }
-
-   /**
-   * Get action
-   * @return action
-  **/
-  @Schema(required = true, description = "")
-  public Action getAction() {
-    return action;
-  }
-
-  public void setAction(Action action) {
-    this.action = action;
   }
 
   public Step info(Info info) {
@@ -94,6 +75,24 @@ public class Step {
     this.info = info;
   }
 
+  public Step action(Object action) {
+    this.action = action;
+    return this;
+  }
+
+   /**
+   * Get action
+   * @return action
+  **/
+  @Schema(description = "")
+  public Object getAction() {
+    return action;
+  }
+
+  public void setAction(Object action) {
+    this.action = action;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -105,13 +104,13 @@ public class Step {
     }
     Step step = (Step) o;
     return Objects.equals(this.state, step.state) &&
-        Objects.equals(this.action, step.action) &&
-        Objects.equals(this.info, step.info);
+        Objects.equals(this.info, step.info) &&
+        Objects.equals(this.action, step.action);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(state, action, info);
+    return Objects.hash(state, info, action);
   }
 
 
@@ -121,8 +120,8 @@ public class Step {
     sb.append("class Step {\n");
     
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
-    sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("    info: ").append(toIndentedString(info)).append("\n");
+    sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("}");
     return sb.toString();
   }

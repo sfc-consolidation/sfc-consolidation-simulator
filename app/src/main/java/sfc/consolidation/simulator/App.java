@@ -31,6 +31,10 @@ public class App implements Runnable {
   @Option(names = { "-i",
       "--api-server" }, description = "API Server URL", required = false, defaultValue = Constants.DEFAULT_API_SERVER)
   static String api_server;
+  @Option(names = { "-m", "--mode" }, description = "Mode", required = false, defaultValue = "EPISODE")
+  static Mode mode;
+  @Option(names = { "--id" }, description = "Id of This Simulator", required = false, defaultValue = "-1")
+  static String id;
 
   final static List<State> states = new ArrayList<>();
   final static List<Action> actions = new ArrayList<>();
@@ -52,28 +56,33 @@ public class App implements Runnable {
     Agent agent = new Agent(algorithm);
 
     // 5. run Simulation.
-    for (int i = 1; i < Constants.MAX_EPISODE_LEN; i++) {
-      states.add(state);
-      Optional<Action> action = agent.inference(state);
-      if (!action.isPresent()) {
-        actions.add(new Action());
-        infos.add(new Info());
-        break;
-      } else {
-        actions.add(action.get());
-        infos.add(env.getResult());
-        state = env.step(action.get());
+    if (mode == Mode.EPISODE) {
+      for (int i = 1; i <= Constants.MAX_EPISODE_LEN; i++) {
+        Optional<Action> action = agent.inference(state);
+        if (!action.isPresent()) {
+          break;
+        } else {
+          states.add(state);
+          actions.add(action.get());
+          state = env.step(action.get());
+          infos.add(env.getResult());
+        }
       }
     }
+
     states.add(state);
+    actions.add(null);
+    infos.add(env.getResult());
 
     // Print Debug Info.
     if (debug) {
       for (int i = 0; i < actions.size(); ++i) {
         System.out.printf("Step: %d%n", i + 1);
         states.get(i).print();
-        actions.get(i).print();
-        infos.get(i).print();
+        if (actions.get(i) != null)
+          actions.get(i).print();
+        if (infos.get(i) != null)
+          infos.get(i).print();
       }
       System.out.println("Initial State:");
       states.get(0).print();
@@ -84,7 +93,7 @@ public class App implements Runnable {
     // Upload results to remote DB.
     if (upload) {
       System.out.println("Saving results to remote DB...");
-      agent.submit(states, actions, infos);
+      agent.submit(states, actions, infos, mode, id);
     }
     System.out.println("Done...");
   }

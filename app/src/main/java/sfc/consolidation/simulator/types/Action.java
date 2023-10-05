@@ -1,6 +1,7 @@
 package sfc.consolidation.simulator.types;
 
 import lombok.Data;
+import com.google.gson.Gson;
 
 /*
  * Action
@@ -19,12 +20,20 @@ public class Action {
     return action;
   }
 
-  public static Action fromResForm(sfc.consolidation.simulator.generated.model.Action action) {
+  public static Action fromResForm(Object action) {
     Action temp = new Action();
+    Gson gson = new Gson();
     try {
-      temp.setVnfId((int) Double.parseDouble(action.getVnfId().toString()));
-      temp.setSrvId((int) Double.parseDouble(action.getSrvId().toString()));
-      return temp;
+      System.out.println(action);
+      if (action != null) {
+        var act = gson.fromJson(gson.toJson(action),
+            sfc.consolidation.simulator.generated.model.Action.class);
+        temp.setVnfId((int) Double.parseDouble(act.getVnfId().toString()));
+        temp.setSrvId((int) Double.parseDouble(act.getSrvId().toString()));
+        return temp;
+      }
+      return null;
+
     } catch (Exception e) {
       System.out.println(e);
       return null;

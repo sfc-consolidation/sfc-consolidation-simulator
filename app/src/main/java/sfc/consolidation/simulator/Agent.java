@@ -13,6 +13,11 @@ import sfc.consolidation.simulator.types.Info;
 import sfc.consolidation.simulator.utils.ApiSingletone;
 import sfc.consolidation.simulator.utils.RandomSingleton;
 
+enum Mode {
+  EPISODE,
+  STEP
+}
+
 enum InferenceAlgorithm {
   RANDOM,
   FIRST_FIT,
@@ -57,6 +62,7 @@ public class Agent {
     try {
       var req = api.inferenceInferencePost(si, apiAlgorithm);
       var res = req.execute().body();
+
       Action action = Action.fromResForm(res);
 
       return Optional.ofNullable(action);
@@ -76,23 +82,42 @@ public class Agent {
     return Optional.ofNullable(action);
   }
 
-  public void submit(List<State> stateList, List<Action> actionList, List<Info> infoList) {
+  public void submit(List<State> stateList, List<Action> actionList, List<Info> infoList, Mode mode, String id) {
     DefaultApi api = ApiSingletone.getInstance();
-    Episode ei = new Episode();
-    List<Step> siList = new ArrayList<>();
-    for (int i = 0; i < actionList.size(); ++i) {
-      Step si = new Step();
-      si.setState(stateList.get(i).toReqForm());
-      si.setAction(actionList.get(i).toReqForm());
-      si.setInfo(infoList.get(i).toReqForm());
-      siList.add(si);
+    if (mode == Mode.EPISODE) {
+      Episode ei = new Episode();
+      List<Step> siList = new ArrayList<>();
+      for (int i = 0; i < actionList.size(); ++i) {
+        Step si = new Step();
+        si.setState(stateList.get(i).toReqForm());
+        if (actionList.get(i) != null) {
+          si.setAction(actionList.get(i).toReqForm());
+        } else {
+          si.setAction(null);
+        }
+        si.setInfo(infoList.get(i).toReqForm());
+        siList.add(si);
+      }
+      ei.setSteps(siList);
+      try {
+        var req = api.saveEpisodeSaveEpisodePost(ei, apiAlgorithm);
+        req.execute();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else if (mode == Mode.STEP) {
+      Step step = new Step();
+      step.setState(stateList.get(0).toReqForm());
+      step.setAction(null);
+      step.setInfo(infoList.get(0).toReqForm());
+      System.out.println(step);
+      try {
+        var req = api.saveStepSaveStepPost(step, apiAlgorithm, id);
+        req.execute();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
-    ei.setSteps(siList);
-    try {
-      var req = api.saveSaveEpisodePost(ei, apiAlgorithm);
-      req.execute();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+
   }
 }
