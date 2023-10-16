@@ -27,7 +27,7 @@ import sfc.consolidation.simulator.generated.model.State;
  * Step
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-05T04:07:07.371478955Z[Etc/UTC]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-07T08:00:09.102916725Z[Etc/UTC]")
 
 public class Step {
   @SerializedName("state")

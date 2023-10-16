@@ -21,7 +21,7 @@ public class App implements Runnable {
   @Option(names = { "-f", "--file" }, description = "Path of topology file")
   static String file_path;
   @Option(names = { "-a",
-      "--algorithm" }, description = "Algorithm to use", required = false, defaultValue = "RANDOM")
+      "--algorithm" }, description = "Algorithm to use", required = false, defaultValue = "FIRST_FIT")
   static InferenceAlgorithm algorithm;
   @Option(names = { "-d", "--debug" }, description = "Print debug info", required = false, defaultValue = "true")
   static boolean debug;
@@ -35,6 +35,8 @@ public class App implements Runnable {
   static Mode mode;
   @Option(names = { "--id" }, description = "Id of This Simulator", required = false, defaultValue = "-1")
   static String id;
+  @Option(names = { "-s", "--state" }, description = "Raw JSON State", required = false)
+  static String state;
 
   final static List<State> states = new ArrayList<>();
   final static List<Action> actions = new ArrayList<>();
@@ -45,7 +47,15 @@ public class App implements Runnable {
     ApiSingletone.setInstance(api_server);
 
     // 2. create Environment
-    Env env = new Env(file_path);
+    Env env;
+    if (file_path != null) {
+      env = new Env("file", file_path);
+    } else if (state != null) {
+      env = new Env("raw", state);
+    } else {
+      env = new Env(null, null);
+    }
+
     // 3. reset Environment
     State state = env.reset();
     if (!env.getResult().isSuccess()) {
@@ -57,7 +67,7 @@ public class App implements Runnable {
 
     // 5. run Simulation.
     if (mode == Mode.EPISODE) {
-      for (int i = 1; i <= Constants.MAX_EPISODE_LEN; i++) {
+      for (int i = 1; i <= 10; i++) {
         Optional<Action> action = agent.inference(state);
         if (!action.isPresent()) {
           break;

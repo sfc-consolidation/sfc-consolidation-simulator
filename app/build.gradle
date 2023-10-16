@@ -11,7 +11,12 @@ plugins {
     id 'application'
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+
+    // Spring Boot
+    id 'org.springframework.boot' version '2.7.16'
 }
+
+apply plugin: 'io.spring.dependency-management'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -28,6 +33,14 @@ ext {
 }
 
 dependencies {
+
+    // Spring Boot
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-tomcat')
+    
+    //  For JSON
+    implementation ('com.fasterxml.jackson.core:jackson-databind')
+
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.2'
 
@@ -37,8 +50,6 @@ dependencies {
     // For DeepCopy
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
-    // For JSON
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
 
     // Command Line Interface Tool
     implementation 'info.picocli:picocli:4.7.5'
@@ -85,6 +96,12 @@ task genInitState(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+bootRun {
+  mainClass = 'sfc.consolidation.simulator.SpringApp'
+  classpath = sourceSets.main.runtimeClasspath
+}
+
+
 shadowJar {
     archiveBaseName.set('SFC_Consolidation_Simulator')
     archiveVersion.set('0.0.1')
@@ -96,4 +113,16 @@ shadowJar {
             'Main-Class': 'sfc.consolidation.simulator.App'
         )
     }
+}
+
+bootJar {
+  archiveBaseName.set('SFC_Consolidation_Simulator_API')
+  archiveVersion.set('0.0.1')
+  manifest {
+	  attributes(
+      'Implementation-Title': 'SFC_Consolidation_Simulator_API',
+      'Implementation-Version': '0.0.1',  
+      'Start-Class': 'sfc.consolidation.simulator.SpringApp'
+    )
+  }
 }

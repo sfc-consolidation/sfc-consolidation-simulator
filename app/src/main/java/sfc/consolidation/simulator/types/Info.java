@@ -12,18 +12,20 @@ public class Info {
   private List<Float> memUtilList = new ArrayList<>();
   private List<Integer> bwUtilList = new ArrayList<>();
   private List<Boolean> sleepList = new ArrayList<>();
+  private List<Float> latencyList = new ArrayList<>();
   private boolean success;
   private int sleepNum;
 
   public sfc.consolidation.simulator.generated.model.Info toReqForm() {
     var info = new sfc.consolidation.simulator.generated.model.Info();
-    info.setPower(powerList);
-    info.setCpuUtil(cpuUtilList);
-    info.setMemUtil(memUtilList);
-    info.setBandwidth(bwUtilList);
-    info.setSleep(sleepList);
+    info.setPowerList(powerList);
+    info.setCpuUtilList(cpuUtilList);
+    info.setMemUtilList(memUtilList);
+    info.setBwUtilList(bwUtilList);
+    info.setSleepList(sleepList);
     info.setSleepNum(sleepNum);
-    info.setIsSuccess(success);
+    info.setSuccess(success);
+    info.setLatencyList(latencyList);
     return info;
   }
 
@@ -40,6 +42,9 @@ public class Info {
           cpuUtilList.get(i) * 100,
           memUtilList.get(i) * 100,
           bwUtilList.get(i));
+    }
+    for (int i = 0; i < latencyList.size(); ++i) {
+      System.out.printf("[SFC %d] Latency: %5.2f sec%n", i + 1, latencyList.get(i));
     }
   }
 }

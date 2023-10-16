@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sfc.consolidation.simulator.types.Rack;
+import sfc.consolidation.simulator.types.ResetArg;
 import sfc.consolidation.simulator.types.SFC;
 import sfc.consolidation.simulator.types.SRV;
 import sfc.consolidation.simulator.types.State;
@@ -85,39 +86,31 @@ public class GeneratorSingleton {
    * 
    * @return a random state
    */
-  static public State getRandomState(
-      int minRack, int maxRack,
-      int minSrv, int maxSrv,
-      int minVnf, int maxVnf,
-      int minSfc, int maxSfc,
-      int minSrvVcpu, int maxSrvVcpu,
-      int minSrvVmem, int maxSrvVmem,
-      int minVnfVcpu, int maxVnfVcpu,
-      int minVnfVmem, int maxVnfVmem) {
+  static public State getRandomState(ResetArg resetArg) {
+    int minRack = clamp(resetArg.getMinRackNum(), Constants.MIN_RACK_NUM, Constants.MAX_RACK_NUM);
+    int maxRack = clamp(resetArg.getMaxRackNum(), minRack, Constants.MAX_RACK_NUM);
 
-    minRack = clamp(minRack, Constants.MIN_RACK_NUM, Constants.MAX_RACK_NUM);
-    maxRack = clamp(maxRack, minRack, Constants.MAX_RACK_NUM);
+    int minSrv = clamp(resetArg.getMinSrvNumInSingleRack(), Constants.MIN_SRV_NUM_IN_SINGLE_RACK,
+        Constants.MAX_SRV_NUM_IN_SINGLE_RACK);
+    int maxSrv = clamp(resetArg.getMaxSrvNumInSingleRack(), minSrv, Constants.MAX_SRV_NUM_IN_SINGLE_RACK);
 
-    minSrv = clamp(minSrv, Constants.MIN_SRV_NUM_IN_SINGLE_RACK, Constants.MAX_SRV_NUM_IN_SINGLE_RACK);
-    maxSrv = clamp(maxSrv, minSrv, Constants.MAX_SRV_NUM_IN_SINGLE_RACK);
+    int minVnf = clamp(resetArg.getMinVnfNum(), Constants.MIN_VNF_NUM, Constants.MAX_VNF_NUM);
+    int maxVnf = clamp(resetArg.getMaxVnfNum(), minVnf, Constants.MAX_VNF_NUM);
 
-    minVnf = clamp(minVnf, Constants.MIN_VNF_NUM, Constants.MAX_VNF_NUM);
-    maxVnf = clamp(maxVnf, minVnf, Constants.MAX_VNF_NUM);
+    int minSfc = clamp(resetArg.getMinSfcNum(), Constants.MIN_SFC_NUM, Constants.MAX_SFC_NUM);
+    int maxSfc = clamp(resetArg.getMaxSfcNum(), minSfc, Constants.MAX_SFC_NUM);
 
-    minSfc = clamp(minSfc, Constants.MIN_SFC_NUM, Constants.MAX_SFC_NUM);
-    maxSfc = clamp(maxSfc, minSfc, Constants.MAX_SFC_NUM);
+    int minSrvVcpu = clamp(resetArg.getMinSrvVcpuNum(), Constants.MIN_SRV_VCPU_NUM, Constants.MAX_SRV_VCPU_NUM);
+    int maxSrvVcpu = clamp(resetArg.getMaxSrvVcpuNum(), minSrvVcpu, Constants.MAX_SRV_VCPU_NUM);
 
-    minSrvVcpu = clamp(minSrvVcpu, Constants.MIN_SRV_VCPU_NUM, Constants.MAX_SRV_VCPU_NUM);
-    maxSrvVcpu = clamp(maxSrvVcpu, minSrvVcpu, Constants.MAX_SRV_VCPU_NUM);
+    int minSrvVmem = clamp(resetArg.getMinSrvVmemMb(), Constants.MIN_SRV_VMEM_MB, Constants.MAX_SRV_VMEM_MB);
+    int maxSrvVmem = clamp(resetArg.getMaxSrvVmemMb(), minSrvVmem, Constants.MAX_SRV_VMEM_MB);
 
-    minSrvVmem = clamp(minSrvVmem, Constants.MIN_SRV_VMEM_MB, Constants.MAX_SRV_VMEM_MB);
-    maxSrvVmem = clamp(maxSrvVmem, minSrvVmem, Constants.MAX_SRV_VMEM_MB);
+    int minVnfVcpu = clamp(resetArg.getMinVnfVcpuNum(), Constants.MIN_VNF_VCPU_NUM, Constants.MAX_VNF_VCPU_NUM);
+    int maxVnfVcpu = clamp(resetArg.getMaxVnfVcpuNum(), minVnfVcpu, Constants.MAX_VNF_VCPU_NUM);
 
-    minVnfVcpu = clamp(minVnfVcpu, Constants.MIN_VNF_VCPU_NUM, Constants.MAX_VNF_VCPU_NUM);
-    maxVnfVcpu = clamp(maxVnfVcpu, minVnfVcpu, Constants.MAX_VNF_VCPU_NUM);
-
-    minVnfVmem = clamp(minVnfVmem, Constants.MIN_VNF_VMEM_MB, Constants.MAX_VNF_VMEM_MB);
-    maxVnfVmem = clamp(maxVnfVmem, minVnfVmem, Constants.MAX_VNF_VMEM_MB);
+    int minVnfVmem = clamp(resetArg.getMinVnfVmemMb(), Constants.MIN_VNF_VMEM_MB, Constants.MAX_VNF_VMEM_MB);
+    int maxVnfVmem = clamp(resetArg.getMaxVnfVmemMb(), minVnfVmem, Constants.MAX_VNF_VMEM_MB);
 
     int rackNum = RandomSingleton.getInstance().nextInt(minRack, maxRack + 1);
     int vnfNum = RandomSingleton.getInstance().nextInt(minVnf, maxVnf + 1);

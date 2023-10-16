@@ -8,6 +8,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import sfc.consolidation.simulator.types.ResetArg;
 import sfc.consolidation.simulator.types.State;
 
 @Command(description = "Generate a topology file", mixinStandardHelpOptions = true, version = "0.0.1")
@@ -74,15 +75,27 @@ public class InitStateGenerator implements Runnable {
   static int maxVnfVmem;
 
   public void run() {
-    State topo = GeneratorSingleton.getRandomState(
-        minRack, maxRack,
-        minSrv, maxSrv,
-        minVnf, maxVnf,
-        minSfc, maxSfc,
-        minSrvVcpu, maxSrvVcpu,
-        minSrvVmem, maxSrvVmem,
-        minVnfVcpu, maxVnfVcpu,
-        minVnfVmem, maxVnfVmem);
+    ResetArg arg = new ResetArg();
+    {
+      arg.setMinRackNum(minRack);
+      arg.setMaxRackNum(maxRack);
+      arg.setMinSrvNumInSingleRack(minSrv);
+      arg.setMaxSrvNumInSingleRack(maxSrv);
+      arg.setMinVnfNum(minVnf);
+      arg.setMaxVnfNum(maxVnf);
+      arg.setMinSfcNum(minSfc);
+      arg.setMaxSfcNum(maxSfc);
+      arg.setMinSrvVcpuNum(minSrvVcpu);
+      arg.setMaxSrvVcpuNum(maxSrvVcpu);
+      arg.setMinSrvVmemMb(minSrvVmem);
+      arg.setMaxSrvVmemMb(maxSrvVmem);
+      arg.setMinVnfVcpuNum(minVnfVcpu);
+      arg.setMaxVnfVcpuNum(maxVnfVcpu);
+      arg.setMinVnfVmemMb(minVnfVmem);
+      arg.setMaxVnfVmemMb(maxVnfVmem);
+    }
+
+    State topo = GeneratorSingleton.getRandomState(arg);
 
     // save topo map object to resources directory using jackson library
     ObjectMapper om = new ObjectMapper();

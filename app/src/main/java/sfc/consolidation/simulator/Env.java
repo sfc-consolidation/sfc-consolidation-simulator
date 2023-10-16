@@ -2,6 +2,8 @@ package sfc.consolidation.simulator;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +13,7 @@ import org.cloudsimplus.core.CloudSimPlus;
 import org.cloudsimplus.resources.Pe;
 import org.cloudsimplus.resources.PeSimple;
 import org.cloudsimplus.vms.network.NetworkVm;
+
 import org.cloudsimplus.vms.HostResourceStats;
 import org.cloudsimplus.hosts.network.NetworkHost;
 import org.cloudsimplus.power.models.PowerModelHost;
@@ -40,12 +43,13 @@ import sfc.consolidation.simulator.types.State;
 import sfc.consolidation.simulator.types.Action;
 import sfc.consolidation.simulator.types.Info;
 import sfc.consolidation.simulator.types.Rack;
+import sfc.consolidation.simulator.types.ResetArg;
 import sfc.consolidation.simulator.utils.Constants;
 import sfc.consolidation.simulator.utils.GeneratorSingleton;
 
 @Getter
 public class Env {
-  private final State initState;
+  private State initState;
   private State curState;
 
   private static final int SCHEDULING_INTERVAL = 5;
@@ -58,21 +62,42 @@ public class Env {
 
   private boolean lastIsSuccess;
 
-  public Env(String topology_path) {
-    // If list is null, generate below default setup.
-    if (topology_path == null) {
-      curState = GeneratorSingleton.getRandomState(
-          2, 2, // # racks = 2
-          3, 3, // # SRVs = 3
-          5, 5, // # VNFs = 5
-          3, 3, // # SFCs = 3
-          100, 100, // # vCPUs = 100
-          32 * 1024, 32 * 1024, // # vMem = 32GB
-          1, 10, // # vCPUs per VNF = 1~10
-          1024 / 2, 1024 * 4); // # vMem per VNF = 512MB ~ 4GB
+  public Env(String mode, String file_or_raw) {
+    if (mode == "file") {
+      curState = readFile(file_or_raw);
+    } else if (mode == "raw") {
+      curState = readRaw(file_or_raw);
     } else {
-      curState = readFile(topology_path);
+      ResetArg arg = new ResetArg();
+      {
+        // # racks = 2
+        arg.setMinRackNum(2);
+        arg.setMaxRackNum(2);
+        // # SRVs = 3
+        arg.setMinSrvNumInSingleRack(3);
+        arg.setMaxSrvNumInSingleRack(3);
+        // # VNFs = 5
+        arg.setMinVnfNum(5);
+        arg.setMaxVnfNum(10);
+        // # SFCs = 3
+        arg.setMinSfcNum(3);
+        arg.setMaxSfcNum(3);
+        // # vCPUs = 100
+        arg.setMinSrvVcpuNum(100);
+        arg.setMaxSrvVcpuNum(100);
+        // # vMem = 32GB
+        arg.setMinSrvVmemMb(32 * 1024);
+        arg.setMaxSrvVmemMb(32 * 1024);
+        // # vCPUs per VNF = 1~10
+        arg.setMinVnfVcpuNum(1);
+        arg.setMaxVnfVcpuNum(10);
+        // # vMem per VNF = 512MB ~ 4GB
+        arg.setMinVnfVmemMb(1024 / 2);
+        arg.setMaxVnfVmemMb(1024 * 4);
+      }
+      curState = GeneratorSingleton.getRandomState(arg);
     }
+    // If list is null, generate below default setup.
     initState = curState.capture(); // deep copy
   }
 
@@ -259,6 +284,13 @@ public class Env {
     return curState.capture();
   }
 
+  public State reset(ResetArg arg) {
+    curState = GeneratorSingleton.getRandomState(arg);
+    initState = curState.capture();
+    setupCloudsimWithState(curState);
+    return curState.capture();
+  }
+
   public Info getResult() {
     Info info = new Info();
     List<Float> powerList = new ArrayList<>();
@@ -299,6 +331,27 @@ public class Env {
     info.setSleepList(sleepList);
     info.setSleepNum(sleepNum);
     info.setSuccess(lastIsSuccess);
+
+    Map<Integer, Float> sfcFinishedTime = new HashMap<>();
+    for (VNF vnf : curState.getVnfList()) {
+      int sfcId = vnf.getSfcId();
+      SFC sfc = curState.getSfcList().stream().filter(s -> s.getId() == sfcId).findFirst().get();
+      if (sfc.getLength() == vnf.getOrderInSfc()) {
+        sfcFinishedTime.put(vnf.getSfcId(), (float) vnf.getCloudlet().getFinishTime());
+      }
+    }
+    List<Float> latencyList = new ArrayList<>();
+    float accTime = 0.0f;
+    for (int i = 1; i <= curState.getSfcList().size(); i++) {
+      try {
+        latencyList.add(sfcFinishedTime.get(i) - accTime);
+        accTime = sfcFinishedTime.get(i);
+      } catch (Exception e) {
+        latencyList.add(0.0f);
+      }
+    }
+    info.setLatencyList(latencyList);
+
     return info;
   }
 
@@ -364,6 +417,20 @@ public class Env {
     try {
       ObjectMapper om = new ObjectMapper();
       State s = om.readValue(new File(topology_path), State.class);
+      return s;
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.print(e);
+      return null;
+    }
+  }
+
+  private State readRaw(String raw_state) {
+    try {
+      ObjectMapper om = new ObjectMapper();
+      raw_state = (raw_state.replaceAll(":\"?([^{|^]*?)\"?(?=[,|}|\\]])", ":\"$1\"").replaceAll("\"?(\\w+)\"?(?=:)",
+          "\"$1\""));
+      State s = om.readValue(raw_state, State.class);
       return s;
     } catch (IOException e) {
       e.printStackTrace();

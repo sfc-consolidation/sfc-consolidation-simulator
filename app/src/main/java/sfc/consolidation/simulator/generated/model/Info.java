@@ -25,118 +25,157 @@ import java.io.IOException;
  * Info
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-05T04:07:07.371478955Z[Etc/UTC]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2023-10-07T08:00:09.102916725Z[Etc/UTC]")
 
 public class Info {
-  @SerializedName("power")
-  private Object power = null;
+  @SerializedName("powerList")
+  private Object powerList = null;
 
-  @SerializedName("bandwidth")
-  private Object bandwidth = null;
+  @SerializedName("cpuUtilList")
+  private Object cpuUtilList = null;
 
-  @SerializedName("cpuUtil")
-  private Object cpuUtil = null;
+  @SerializedName("memUtilList")
+  private Object memUtilList = null;
 
-  @SerializedName("memUtil")
-  private Object memUtil = null;
+  @SerializedName("bwUtilList")
+  private Object bwUtilList = null;
 
-  @SerializedName("sleep")
-  private Object sleep = null;
+  @SerializedName("sleepList")
+  private Object sleepList = null;
+
+  @SerializedName("latencyList")
+  private Object latencyList = null;
+
+  @SerializedName("success")
+  private Object success = null;
 
   @SerializedName("sleepNum")
   private Object sleepNum = null;
 
-  @SerializedName("isSuccess")
-  private Object isSuccess = null;
-
-  public Info power(Object power) {
-    this.power = power;
+  public Info powerList(Object powerList) {
+    this.powerList = powerList;
     return this;
   }
 
    /**
-   * Get power
-   * @return power
+   * Get powerList
+   * @return powerList
   **/
   @Schema(required = true, description = "")
-  public Object getPower() {
-    return power;
+  public Object getPowerList() {
+    return powerList;
   }
 
-  public void setPower(Object power) {
-    this.power = power;
+  public void setPowerList(Object powerList) {
+    this.powerList = powerList;
   }
 
-  public Info bandwidth(Object bandwidth) {
-    this.bandwidth = bandwidth;
+  public Info cpuUtilList(Object cpuUtilList) {
+    this.cpuUtilList = cpuUtilList;
     return this;
   }
 
    /**
-   * Get bandwidth
-   * @return bandwidth
+   * Get cpuUtilList
+   * @return cpuUtilList
   **/
   @Schema(required = true, description = "")
-  public Object getBandwidth() {
-    return bandwidth;
+  public Object getCpuUtilList() {
+    return cpuUtilList;
   }
 
-  public void setBandwidth(Object bandwidth) {
-    this.bandwidth = bandwidth;
+  public void setCpuUtilList(Object cpuUtilList) {
+    this.cpuUtilList = cpuUtilList;
   }
 
-  public Info cpuUtil(Object cpuUtil) {
-    this.cpuUtil = cpuUtil;
+  public Info memUtilList(Object memUtilList) {
+    this.memUtilList = memUtilList;
     return this;
   }
 
    /**
-   * Get cpuUtil
-   * @return cpuUtil
+   * Get memUtilList
+   * @return memUtilList
   **/
   @Schema(required = true, description = "")
-  public Object getCpuUtil() {
-    return cpuUtil;
+  public Object getMemUtilList() {
+    return memUtilList;
   }
 
-  public void setCpuUtil(Object cpuUtil) {
-    this.cpuUtil = cpuUtil;
+  public void setMemUtilList(Object memUtilList) {
+    this.memUtilList = memUtilList;
   }
 
-  public Info memUtil(Object memUtil) {
-    this.memUtil = memUtil;
+  public Info bwUtilList(Object bwUtilList) {
+    this.bwUtilList = bwUtilList;
     return this;
   }
 
    /**
-   * Get memUtil
-   * @return memUtil
+   * Get bwUtilList
+   * @return bwUtilList
   **/
   @Schema(required = true, description = "")
-  public Object getMemUtil() {
-    return memUtil;
+  public Object getBwUtilList() {
+    return bwUtilList;
   }
 
-  public void setMemUtil(Object memUtil) {
-    this.memUtil = memUtil;
+  public void setBwUtilList(Object bwUtilList) {
+    this.bwUtilList = bwUtilList;
   }
 
-  public Info sleep(Object sleep) {
-    this.sleep = sleep;
+  public Info sleepList(Object sleepList) {
+    this.sleepList = sleepList;
     return this;
   }
 
    /**
-   * Get sleep
-   * @return sleep
+   * Get sleepList
+   * @return sleepList
   **/
   @Schema(required = true, description = "")
-  public Object getSleep() {
-    return sleep;
+  public Object getSleepList() {
+    return sleepList;
   }
 
-  public void setSleep(Object sleep) {
-    this.sleep = sleep;
+  public void setSleepList(Object sleepList) {
+    this.sleepList = sleepList;
+  }
+
+  public Info latencyList(Object latencyList) {
+    this.latencyList = latencyList;
+    return this;
+  }
+
+   /**
+   * Get latencyList
+   * @return latencyList
+  **/
+  @Schema(required = true, description = "")
+  public Object getLatencyList() {
+    return latencyList;
+  }
+
+  public void setLatencyList(Object latencyList) {
+    this.latencyList = latencyList;
+  }
+
+  public Info success(Object success) {
+    this.success = success;
+    return this;
+  }
+
+   /**
+   * Get success
+   * @return success
+  **/
+  @Schema(required = true, description = "")
+  public Object getSuccess() {
+    return success;
+  }
+
+  public void setSuccess(Object success) {
+    this.success = success;
   }
 
   public Info sleepNum(Object sleepNum) {
@@ -157,24 +196,6 @@ public class Info {
     this.sleepNum = sleepNum;
   }
 
-  public Info isSuccess(Object isSuccess) {
-    this.isSuccess = isSuccess;
-    return this;
-  }
-
-   /**
-   * Get isSuccess
-   * @return isSuccess
-  **/
-  @Schema(required = true, description = "")
-  public Object getIsSuccess() {
-    return isSuccess;
-  }
-
-  public void setIsSuccess(Object isSuccess) {
-    this.isSuccess = isSuccess;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -185,18 +206,19 @@ public class Info {
       return false;
     }
     Info info = (Info) o;
-    return Objects.equals(this.power, info.power) &&
-        Objects.equals(this.bandwidth, info.bandwidth) &&
-        Objects.equals(this.cpuUtil, info.cpuUtil) &&
-        Objects.equals(this.memUtil, info.memUtil) &&
-        Objects.equals(this.sleep, info.sleep) &&
-        Objects.equals(this.sleepNum, info.sleepNum) &&
-        Objects.equals(this.isSuccess, info.isSuccess);
+    return Objects.equals(this.powerList, info.powerList) &&
+        Objects.equals(this.cpuUtilList, info.cpuUtilList) &&
+        Objects.equals(this.memUtilList, info.memUtilList) &&
+        Objects.equals(this.bwUtilList, info.bwUtilList) &&
+        Objects.equals(this.sleepList, info.sleepList) &&
+        Objects.equals(this.latencyList, info.latencyList) &&
+        Objects.equals(this.success, info.success) &&
+        Objects.equals(this.sleepNum, info.sleepNum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(power, bandwidth, cpuUtil, memUtil, sleep, sleepNum, isSuccess);
+    return Objects.hash(powerList, cpuUtilList, memUtilList, bwUtilList, sleepList, latencyList, success, sleepNum);
   }
 
 
@@ -205,13 +227,14 @@ public class Info {
     StringBuilder sb = new StringBuilder();
     sb.append("class Info {\n");
     
-    sb.append("    power: ").append(toIndentedString(power)).append("\n");
-    sb.append("    bandwidth: ").append(toIndentedString(bandwidth)).append("\n");
-    sb.append("    cpuUtil: ").append(toIndentedString(cpuUtil)).append("\n");
-    sb.append("    memUtil: ").append(toIndentedString(memUtil)).append("\n");
-    sb.append("    sleep: ").append(toIndentedString(sleep)).append("\n");
+    sb.append("    powerList: ").append(toIndentedString(powerList)).append("\n");
+    sb.append("    cpuUtilList: ").append(toIndentedString(cpuUtilList)).append("\n");
+    sb.append("    memUtilList: ").append(toIndentedString(memUtilList)).append("\n");
+    sb.append("    bwUtilList: ").append(toIndentedString(bwUtilList)).append("\n");
+    sb.append("    sleepList: ").append(toIndentedString(sleepList)).append("\n");
+    sb.append("    latencyList: ").append(toIndentedString(latencyList)).append("\n");
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
     sb.append("    sleepNum: ").append(toIndentedString(sleepNum)).append("\n");
-    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
     sb.append("}");
     return sb.toString();
   }
